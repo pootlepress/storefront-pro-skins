@@ -1,1 +1,1 @@
-# wp-skins
+# WP Skins
