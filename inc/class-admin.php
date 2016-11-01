@@ -42,6 +42,8 @@ class WP_Skins_Admin {
 		$this->url     =   WP_Skins::$url;
 		$this->path    =   WP_Skins::$path;
 		$this->version =   WP_Skins::$version;
+
+		add_action( 'customize_register', array( $this, 'customize_register' ) );
 	} // End __construct()
 
 	/**
@@ -64,10 +66,56 @@ class WP_Skins_Admin {
 	 * @action wp_enqueue_scripts
 	 */
 	public function enqueue() {
+		?>
+		<div id="wp-skins-overlay" style="display: none;"></div>
+		<div id="wp-skins-dialog" style="display: none;">
+			<div class="notice already-exists" style="display: none">
+				<p>
+					Skin with this name already exists. Rename the skin or
+					<button id="wp-skins-overwrite-skin" class="button">Overwrite</button>
+				</p>
+			</div>
+			<input placeholder="Skin name" type="text" id="wp-skins-name">
+			<button id="wp-skins-save-skin" class="button button-primary">Save skin</button>
+		</div>
+		<?php
+
 		$token = $this->token;
 		$url = $this->url;
 
 		wp_enqueue_style( $token . '-css', $url . '/assets/admin.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
+	}
+	/**
+	 * Registers customizer elements
+	 * @param WP_Customize_Manager $wp_customize
+	 */
+	public function customize_register( $wp_customize ) {
+		$wp_customize->add_section( 'wp_skins_section',
+			array(
+				'title' => __( 'Skins', 'wp-skins' ),
+				'priority' => -7,
+				'description' => __('Save and apply customizer settings as skins.', 'wp-skin'),
+			)
+		);
+
+		$wp_customize->add_setting( 'wp_skins',
+			array(
+				'type' => 'option',
+				'transport' => 'refresh',
+			)
+		);
+
+		$wp_customize->add_control(
+			'wp-skin_link_textcolor',
+			array(
+				'label' => __( 'Skins data', 'wp-skin' ),
+				'type' => 'hidden',
+				'section' => 'wp_skins_section',
+				'settings' => 'wp_skins',
+				'priority' => 7,
+			)
+		);
+
 	}
 }

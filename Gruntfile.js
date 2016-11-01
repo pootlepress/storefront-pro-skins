@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 			dist: {
 				options: {
 					style : 'compact',
-					sourcemap: 'none'
+					//sourcemap: 'none'
 				},
 				files:  [
 					{
