@@ -20,12 +20,11 @@ jQuery ($) ->
 	$ '#wp-skins-save-skin'
 	.click () ->
 		values = {}
-		$ '[data-customize-setting-link]'
-		.each () ->
-			$t = $( this )
-			if ( ( $t.is ':radio' || $t.is ':checkbox' ) && ! $t.prop 'checked' )
-				return;
-			values[$t.attr( 'data-customize-setting-link' )] = $t.val()
+		$.each( wp.customize._value, (k,v) ->
+			val = v._value
+			if ( typeof val == 'string' )
+				values[k] = val
+		)
 		console.log( values )
 
 
@@ -33,3 +32,6 @@ jQuery ($) ->
 	.click () ->
 		$overlay.show()
 		$dialog.show()
+	$overlay.click () ->
+		$overlay.hide()
+		$dialog.hide()

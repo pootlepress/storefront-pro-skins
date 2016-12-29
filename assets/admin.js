@@ -16,18 +16,21 @@ jQuery(function($) {
   $('#wp-skins-save-skin').click(function() {
     var values;
     values = {};
-    $('[data-customize-setting-link]').each(function() {
-      var $t;
-      $t = $(this);
-      if (($t.is(':radio' || $t.is(':checkbox'))) && !$t.prop('checked')) {
-        return;
+    $.each(wp.customize._value, function(k, v) {
+      var val;
+      val = v._value;
+      if (typeof val === 'string') {
+        return values[k] = val;
       }
-      return values[$t.attr('data-customize-setting-link')] = $t.val();
     });
     return console.log(values);
   });
-  return $('#wp-skins-save-dialog').click(function() {
+  $('#wp-skins-save-dialog').click(function() {
     $overlay.show();
     return $dialog.show();
+  });
+  return $overlay.click(function() {
+    $overlay.hide();
+    return $dialog.hide();
   });
 });
