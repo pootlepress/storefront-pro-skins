@@ -5,32 +5,42 @@
  * @package WP_Skins
  * @version 1.0.0
  */
+var wpSkins;
+
+wpSkins = typeOf(wpSkins === 'object') ? wpSkins : {};
+
 jQuery(function($) {
-  var $dialog, $overlay;
-  $overlay = $('#wp-skins-overlay');
-  $dialog = $('#wp-skins-dialog');
+  wpSkins.$orle = $('#wp-skins-overlay');
+  wpSkins.$dlg = $('#wp-skins-dialog');
+  wpSkins.get = function(id) {
+    return wp.customize.control.value(id).setting.get();
+  };
+  wpSkins.set = function(id, val) {
+    return wp.customize.control.value(id).setting.set(val);
+  };
+  wpSkins.showSaveDlg = function() {
+    wpSkins.$orle.show();
+    return wpSkins.$dlg.show();
+  };
+  wpSkins.closeSaveDlg = function(id, val) {
+    wpSkins.$orle.hide();
+    return wpSkins.$dlg.hide();
+  };
+  wpSkins.saveSkin = function() {
+    var values;
+    values = {};
+    $.each(wp.customize.settings.settings, function(k, v) {
+      if (v && v.type === 'theme_mod') {
+        return values[k] = wpSkins.get(k);
+      }
+    });
+    return wpSkins.closeSaveDlg;
+  };
   $('#customize-header-actions').prepend($('<a/>').addClass('button button-primary').attr({
     id: 'wp-skins-save-dialog',
     title: 'Save as a skin'
   }).html('Save skin'));
-  $('#wp-skins-save-skin').click(function() {
-    var values;
-    values = {};
-    $.each(wp.customize._value, function(k, v) {
-      var val;
-      val = v._value;
-      if (typeof val === 'string') {
-        return values[k] = val;
-      }
-    });
-    return console.log(values);
-  });
-  $('#wp-skins-save-dialog').click(function() {
-    $overlay.show();
-    return $dialog.show();
-  });
-  return $overlay.click(function() {
-    $overlay.hide();
-    return $dialog.hide();
-  });
+  $('#wp-skins-save-skin').click(wpSkins.saveSkin);
+  $('#wp-skins-save-dialog').click(wpSkins.showSaveDlg);
+  return wpSkins.$orle.click(wpSkins.closeSaveDlg);
 });

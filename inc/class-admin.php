@@ -85,6 +85,9 @@ class WP_Skins_Admin {
 
 		wp_enqueue_style( $token . '-css', $url . '/assets/admin.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
+		wp_localize_script( $token . '-js', 'wpSkins', array(
+			'data' => get_option( 'wp_skin_data', array() ),
+		) );
 	}
 	/**
 	 * Registers customizer elements
@@ -107,7 +110,7 @@ class WP_Skins_Admin {
 		);
 
 		$wp_customize->add_control(
-			'wp-skin_link_textcolor',
+			'wp_skin_data',
 			array(
 				'label' => __( 'Skins data', 'wp-skin' ),
 				'type' => 'hidden',
