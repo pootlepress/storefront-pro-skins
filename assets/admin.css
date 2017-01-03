@@ -10,4 +10,5 @@
 #wp-skins-dialog .notice.already-exists * { margin: 0; }
 #wp-skins-dialog .notice.already-exists button { float: right; }
 
-/*# sourceMappingURL=admin.css.map */
+h3.wp-skin-button { padding: 1em; background: #fff; border: 1px solid #ccc; cursor: pointer; opacity: 0.7; }
+h3.wp-skin-button:hover { opacity: 1; }

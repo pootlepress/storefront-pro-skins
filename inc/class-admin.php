@@ -44,6 +44,7 @@ class WP_Skins_Admin {
 		$this->version =   WP_Skins::$version;
 
 		add_action( 'customize_register', array( $this, 'customize_register' ) );
+		add_action( 'wp_ajax_wp_skins_save', array( $this, 'ajax_wp_skins_save' ) );
 	} // End __construct()
 
 	/**
@@ -75,7 +76,7 @@ class WP_Skins_Admin {
 					<button id="wp-skins-overwrite-skin" class="button">Overwrite</button>
 				</p>
 			</div>
-			<input placeholder="Skin name" type="text" id="wp-skins-name">
+			<input placeholder="Skin name" type="text" id="wp-skins-skin-name">
 			<button id="wp-skins-save-skin" class="button button-primary">Save skin</button>
 		</div>
 		<?php
@@ -86,14 +87,26 @@ class WP_Skins_Admin {
 		wp_enqueue_style( $token . '-css', $url . '/assets/admin.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
 		wp_localize_script( $token . '-js', 'wpSkins', array(
-			'data' => get_option( 'wp_skin_data', array() ),
+			'data' => json_decode( get_option( 'wp_skin_data', '{}' ), true ),
 		) );
 	}
+
+	/**
+	 * AJAX action to save skins data
+	 */
+	public function ajax_wp_skins_save() {
+		if ( current_user_can( 'manage_options' ) && ! empty( $_POST['skins'] ) ) {
+			update_option( 'wp_skin_data', json_encode( $_POST['skins'] ) );
+		}
+	}
+
 	/**
 	 * Registers customizer elements
 	 * @param WP_Customize_Manager $wp_customize
 	 */
 	public function customize_register( $wp_customize ) {
+		require_once 'class-customize-control.php';
+
 		$wp_customize->add_section( 'wp_skins_section',
 			array(
 				'title' => __( 'Skins', 'wp-skins' ),
@@ -102,7 +115,7 @@ class WP_Skins_Admin {
 			)
 		);
 
-		$wp_customize->add_setting( 'wp_skins',
+		$wp_customize->add_setting( 'wp_skin_data',
 			array(
 				'type' => 'option',
 				'transport' => 'refresh',
@@ -110,15 +123,12 @@ class WP_Skins_Admin {
 		);
 
 		$wp_customize->add_control(
-			'wp_skin_data',
-			array(
+			new WP_Skins_Customize_Control( $wp_customize, 'wp_skin_data', array(
 				'label' => __( 'Skins data', 'wp-skin' ),
-				'type' => 'hidden',
 				'section' => 'wp_skins_section',
-				'settings' => 'wp_skins',
+				'settings' => 'wp_skin_data',
 				'priority' => 7,
-			)
-		);
+			) ) );
 
 	}
 }
