@@ -1,4 +1,3 @@
-
 /*
  * Plugin admin end scripts
  *
@@ -7,9 +6,9 @@
  */
 var wpSkins;
 
-wpSkins = typeof wpSkins === 'object' ? wpSkins : {};
+wpSkins = 'object' === typeof wpSkins && wpSkins ? wpSkins : {};
 
-wpSkins.data = typeof wpSkins.data === 'object' ? wpSkins.data : {};
+wpSkins.data = 'object' === typeof wpSkins.data && wpSkins.data ? wpSkins.data : {};
 
 jQuery(function($) {
   wpSkins.$orle = $('#wp-skins-overlay');
@@ -42,7 +41,7 @@ jQuery(function($) {
     });
   };
   wpSkins.addSkin = function(name, values) {
-    if (wpSkins.data[name]) {
+    if (wpSkins.data && wpSkins.data[name]) {
       if (confirm('Skin with name "' + name + '" already exists, Do you wanna over write it?')) {
         wpSkins.data[name] = values;
       }

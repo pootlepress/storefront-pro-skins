@@ -5,8 +5,9 @@
  * @version 1.0.0
 ###
 
-wpSkins = if typeof wpSkins == 'object' then wpSkins else {}
-wpSkins.data = if typeof wpSkins.data == 'object' then wpSkins.data else {}
+wpSkins = if 'object' == typeof wpSkins && wpSkins then wpSkins else {}
+
+wpSkins.data = if 'object' == typeof wpSkins.data && wpSkins.data then wpSkins.data else {}
 
 jQuery ($) ->
 
@@ -48,7 +49,7 @@ jQuery ($) ->
 
 	# Method: Add skin to data
 	wpSkins.addSkin = ( name, values ) ->
-		if ( wpSkins.data[ name ] )
+		if ( wpSkins.data && wpSkins.data[ name ] )
 			if ( confirm 'Skin with name "' + name + '" already exists, Do you wanna over write it?' )
 				wpSkins.data[ name ] = values
 		else
