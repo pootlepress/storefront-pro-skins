@@ -31,21 +31,26 @@ jQuery ($) ->
 	# Method: Prepare skins control
 	wpSkins.refreshSkinControl = () ->
 		wpSkins.$wrap.html ''
-
 		data = {
-			'action': 'wp_skins_save',
+			'action': 'wp_skins_save'
 			'skins': wpSkins.data
+			'theme': wpSkins.theme
 		};
 
 		$.post( ajaxurl, data, (response) -> )
 
-		$.each( wpSkins.data, ( name, values ) ->
+		$.each( wpSkins.data, ( name, v ) ->
 			wpSkins.$wrap.append(
 				$ '<h3></h3>'
 				.addClass 'wp-skin-button'
 				.html name
+				.append(
+					$ '<span></span>'
+					.addClass 'delete dashicons dashicons-no'
+				)
 			)
-		);
+		)
+		wpSkins.$wrap.append '<span class="no-skins">You don\'t have any skins for ' + wpSkins.theme + ' theme...</span>'
 
 	# Method: Add skin to data
 	wpSkins.addSkin = ( name, values ) ->
@@ -58,6 +63,7 @@ jQuery ($) ->
 
 	# Method: Show skin save dialog
 	wpSkins.showSaveDlg = () ->
+		wpSkins.$
 		wpSkins.$orle.show()
 		wpSkins.$dlg.show()
 
@@ -68,15 +74,51 @@ jQuery ($) ->
 
 	# Method: Save skin button
 	wpSkins.saveSkinButton = () ->
-		values = {}
-		$.each( wp.customize.settings.settings, (k,v) ->
-			if ( v && v.type == 'theme_mod' )
-				val = wpSkins.get( k )
-				if ( val != 'wp_skins_no_value' )
-					values[k] = val
-		)
-		wpSkins.addSkin( $( '#wp-skins-skin-name' ).val(), values )
+		skinName = $( '#wp-skins-skin-name' ).val()
+		$( '#wp-skins-skin-name' ).val( '' )
+
+		if 'string' is typeof wpSkins.renameSkin
+			if wpSkins.renameSkin isnt skinName
+				wpSkins.data[ skinName ] = wpSkins.data[ wpSkins.renameSkin ]
+				delete wpSkins.data[ wpSkins.renameSkin ]
+				delete wpSkins.renameSkin
+				wpSkins.refreshSkinControl();
+			$( '#wp-skins-save-skin' ).text( 'Save skin' )
+		else
+			values = {}
+			$.each( wp.customize.settings.settings, (k,v) ->
+				if ( v && v.type == 'theme_mod' )
+					val = wpSkins.get( k )
+					if ( val != 'wp_skins_no_value' )
+						values[k] = val
+			)
+			wpSkins.addSkin( skinName, values )
 		wpSkins.closeSaveDlg()
+
+	# Method: Clicked skin
+	wpSkins.clickedSkin = ( e ) ->
+		$t = $( e.target )
+		skin = $t.closest( '.wp-skin-button' ).text()
+
+		if $t.is( '.wp-skin-button .delete' )
+			if confirm 'Are you sure you want to delete "' + skin + '" skin?'
+				delete wpSkins.data[ skin ]
+				wpSkins.refreshSkinControl();
+		else if $t.is( '.wp-skin-button' )
+			settings = wpSkins.data[ skin ]
+			if ( settings )
+				if ( confirm 'Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!' )
+					$.each( settings, ( k, v ) ->
+						wpSkins.set( k, v )
+					)
+
+	# Method: Clicked skin
+	wpSkins.doubleClickedSkin = ( e ) ->
+		$t = $( e.target )
+		wpSkins.renameSkin = $t.closest( '.wp-skin-button' ).text()
+		$( '#wp-skins-skin-name' ).val( wpSkins.renameSkin )
+		$( '#wp-skins-save-skin' ).text( 'Rename' )
+		wpSkins.showSaveDlg()
 
 	# DOM Manipulation
 	$ '#customize-header-actions'
@@ -98,12 +140,14 @@ jQuery ($) ->
 
 	# Handler: Skin apply handler
 	wpSkins.$wrap.click ( e ) ->
-		$t = $( e.target )
-		if $t.is( '.wp-skin-button' )
-			settings = wpSkins.data[$t.html()];
+		if wpSkins.timesClickedSkin is 1 # Clicked second time within 250ms
+			wpSkins.doubleClickedSkin( e );
+			wpSkins.timesClickedSkin = 2; # Not single click
+		else
+			wpSkins.timesClickedSkin = 1;
 
-			if ( settings )
-				if ( confirm 'Are you sure you want to apply "' + $t.html() + '" skin? Your current changes will be lost!' )
-					$.each( settings, ( k, v ) ->
-						wpSkins.set( k, v );
-					)
+		setTimeout( () ->
+			if wpSkins.timesClickedSkin is 1
+				wpSkins.clickedSkin( e );
+			wpSkins.timesClickedSkin = false;
+		, 250 );

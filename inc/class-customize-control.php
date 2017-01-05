@@ -8,22 +8,27 @@ class WP_Skins_Customize_Control extends WP_Customize_Control {
 
 	function render_content() {
 		$skins = json_decode( $this->value(), 'array' );
+		$theme = get_stylesheet();
 		?>
-		<label>
-			<?php if ( ! empty( $this->label ) ) : ?>
-				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-			<?php endif;
-			if ( ! empty( $this->description ) ) : ?>
-				<span class="description customize-control-description"><?php echo $this->description; ?></span>
-			<?php endif; ?>
-		</label>
+		<span class="customize-control-title">
+			Skins for '<?php echo $theme; ?>' theme
+		</span>
+		<hr>
 		<div id="wp-skins-wrap">
 			<?php
-			foreach ( $skins as $name => $val ) {
-				echo "<h3 class='wp-skin-button'>$name</h3>";
+			if ( $skins && ! empty( $skins[ $theme ] ) ) {
+				foreach ( $skins[ $theme ] as $name => $val ) {
+					echo "<h3 class='wp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
+				}
+			} else {
+				echo "<span class='no-skins'>You don't have any skins for '$theme' theme...</span>";
 			}
 			?>
 		</div>
+		<hr>
+		<span class="description customize-control-description">
+			Click on a skin to apply it, double click to rename it and click <span class='dashicons dashicons-no'></span> to delete.
+		</span>
 		<?php
 	}
 }

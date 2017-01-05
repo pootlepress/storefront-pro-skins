@@ -2,10 +2,10 @@
 /*
 Plugin Name: WP Skins
 Plugin URI: http://pootlepress.com/
-Description: Boilerplate for fast track Pootle Page Builder Addon Development
-Author: Shramee
+Description: Save instances of theme customization settings as skins and apply them on demand later.
+Author: pootlepress
 Version: 1.0.0
-Author URI: http://shramee.com/
+Author URI: http://pootlepress.com/
 @developer shramee <shramee.srivastav@gmail.com>
 */
 

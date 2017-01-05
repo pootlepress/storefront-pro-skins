@@ -10,5 +10,11 @@
 #wp-skins-dialog .notice.already-exists * { margin: 0; }
 #wp-skins-dialog .notice.already-exists button { float: right; }
 
-h3.wp-skin-button { padding: 1em; background: #fff; border: 1px solid #ccc; cursor: pointer; opacity: 0.7; }
+.no-skins { font-size: 1.1em; color: #777; }
+
+h3.wp-skin-button { padding: 1em; background: #fff; border: 1px solid #ccc; cursor: pointer; opacity: 0.88; position: relative; }
 h3.wp-skin-button:hover { opacity: 1; }
+h3.wp-skin-button .delete { position: absolute; top: 50%; margin-top: -10px; right: 0.5em; }
+h3.wp-skin-button ~ .no-skins { display: none; }
+
+/*# sourceMappingURL=admin.css.map */

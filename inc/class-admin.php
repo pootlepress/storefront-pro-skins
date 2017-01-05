@@ -86,8 +86,13 @@ class WP_Skins_Admin {
 
 		wp_enqueue_style( $token . '-css', $url . '/assets/admin.css' );
 		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
+
+		$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
+		$theme = get_stylesheet();
+
 		wp_localize_script( $token . '-js', 'wpSkins', array(
-			'data' => json_decode( get_option( 'wp_skin_data', '{}' ), true ),
+			'data'	=> ! $skins || empty( $skins[ $theme ] ) ? new stdClass() : $skins[ $theme ],
+			'theme'	=> $theme,
 		) );
 	}
 
@@ -95,8 +100,18 @@ class WP_Skins_Admin {
 	 * AJAX action to save skins data
 	 */
 	public function ajax_wp_skins_save() {
-		if ( current_user_can( 'manage_options' ) && ! empty( $_POST['skins'] ) ) {
-			update_option( 'wp_skin_data', json_encode( $_POST['skins'] ) );
+		if ( current_user_can( 'manage_options' ) && ! empty( $_POST['skins'] ) && ! empty( $_POST['theme'] ) ) {
+			$theme = $_POST['theme'];
+			$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
+			if ( ! $skins ) {
+				$skins = array();
+			}
+			$skins[ $theme ] = $_POST['skins'];
+			if ( update_option( 'wp_skins_data', json_encode( $skins ) ) ) {
+				die( 'success' );
+			} else {
+				die( '' );
+			}
 		}
 	}
 
@@ -115,7 +130,7 @@ class WP_Skins_Admin {
 			)
 		);
 
-		$wp_customize->add_setting( 'wp_skin_data',
+		$wp_customize->add_setting( 'wp_skins_data',
 			array(
 				'type' => 'option',
 				'transport' => 'refresh',
@@ -123,10 +138,10 @@ class WP_Skins_Admin {
 		);
 
 		$wp_customize->add_control(
-			new WP_Skins_Customize_Control( $wp_customize, 'wp_skin_data', array(
-				'label' => __( 'Skins data', 'wp-skin' ),
+			new WP_Skins_Customize_Control( $wp_customize, 'wp_skins_data', array(
+				'label' => __( 'Skins for this theme', 'wp-skin' ),
 				'section' => 'wp_skins_section',
-				'settings' => 'wp_skin_data',
+				'settings' => 'wp_skins_data',
 				'priority' => 7,
 			) ) );
 

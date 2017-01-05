@@ -61,13 +61,30 @@
 	}
 }
 
+.no-skins {
+	font-size: 1.1em;
+	color: #777;
+}
+
 h3.wp-skin-button {
 	padding: 1em;
 	background: #fff;
 	border: 1px solid #ccc;
 	cursor: pointer;
 	opacity: 0.88;
+	position: relative;
 	&:hover {
 		opacity:1;
+	}
+
+	.delete {
+		position: absolute;
+		top: 50%;
+		margin-top: -10px;
+		right: 0.5em;
+	}
+
+	~ .no-skins {
+		display: none;
 	}
 }
