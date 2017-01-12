@@ -20,7 +20,22 @@ jQuery ($) ->
 	# Element: Skins control wrapper
 	wpSkins.$wrap = $ '#wp-skins-wrap'
 
+	# Property: Settings maps
+	wpSkins.settingsMaps = {}
+
 	# Method: Get setting value
+	wpSkins.prepMaps = ->
+		wpSkins.settingsMaps = {} # Reset maps
+		$.each( wp.customize.settings.controls, (k, control) ->
+			if ( control && control.settings && control.settings.default ) # Control has a setting ID
+				settingId = control.settings.default
+				if ( wp.customize.settings.settings[ settingId ] ) # Setting for setting ID exists
+					setting = wp.customize.settings.settings[ settingId ]
+					if 'theme_mod' is setting.type # Setting type is theme_mod
+						wpSkins.settingsMaps[ settingId ] = control.id
+		)
+
+# Method: Get setting value
 	wpSkins.get = ( id ) ->
 		return if wp.customize.control.value( id ) then wp.customize.control.value( id ).setting.get() else 'wp_skins_no_value'
 
@@ -86,11 +101,11 @@ jQuery ($) ->
 			$( '#wp-skins-save-skin' ).text( 'Save skin' )
 		else
 			values = {}
-			$.each( wp.customize.settings.settings, (k,v) ->
-				if ( v && v.type == 'theme_mod' )
-					val = wpSkins.get( k )
-					if ( val != 'wp_skins_no_value' )
-						values[k] = val
+			supportedSettingTypes = [ 'theme_mod' ]
+			$.each( wpSkins.settingsMaps, ( setID, conID ) ->
+				val = wpSkins.get( conID ) # Get data with control ID
+				if ( val != 'wp_skins_no_value' )
+					values[ setID ] = val # Set data with setting ID
 			)
 			wpSkins.addSkin( skinName, values )
 		wpSkins.closeSaveDlg()
@@ -108,8 +123,8 @@ jQuery ($) ->
 			settings = wpSkins.data[ skin ]
 			if ( settings )
 				if ( confirm 'Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!' )
-					$.each( settings, ( k, v ) ->
-						wpSkins.set( k, v )
+					$.each( settings, ( setID, value ) ->
+						wpSkins.set( wpSkins.settingsMaps[ setID ], value )
 					)
 
 	# Method: Clicked skin
@@ -119,6 +134,9 @@ jQuery ($) ->
 		$( '#wp-skins-skin-name' ).val( wpSkins.renameSkin )
 		$( '#wp-skins-save-skin' ).text( 'Rename' )
 		wpSkins.showSaveDlg()
+
+	# Prepare maps for settings
+	wpSkins.prepMaps()
 
 	# DOM Manipulation
 	$ '#customize-header-actions'
@@ -148,6 +166,6 @@ jQuery ($) ->
 
 		setTimeout( () ->
 			if wpSkins.timesClickedSkin is 1
-				wpSkins.clickedSkin( e );
-			wpSkins.timesClickedSkin = false;
-		, 250 );
+				wpSkins.clickedSkin( e )
+			wpSkins.timesClickedSkin = false
+		, 250 )

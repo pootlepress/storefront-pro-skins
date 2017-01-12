@@ -15,6 +15,22 @@ jQuery(function($) {
   wpSkins.$orle = $('#wp-skins-overlay');
   wpSkins.$dlg = $('#wp-skins-dialog');
   wpSkins.$wrap = $('#wp-skins-wrap');
+  wpSkins.settingsMaps = {};
+  wpSkins.prepMaps = function() {
+    wpSkins.settingsMaps = {};
+    return $.each(wp.customize.settings.controls, function(k, control) {
+      var setting, settingId;
+      if (control && control.settings && control.settings["default"]) {
+        settingId = control.settings["default"];
+        if (wp.customize.settings.settings[settingId]) {
+          setting = wp.customize.settings.settings[settingId];
+          if ('theme_mod' === setting.type) {
+            return wpSkins.settingsMaps[settingId] = control.id;
+          }
+        }
+      }
+    });
+  };
   wpSkins.get = function(id) {
     if (wp.customize.control.value(id)) {
       return wp.customize.control.value(id).setting.get();
@@ -63,7 +79,7 @@ jQuery(function($) {
     return wpSkins.$dlg.hide();
   };
   wpSkins.saveSkinButton = function() {
-    var skinName, values;
+    var skinName, supportedSettingTypes, values;
     skinName = $('#wp-skins-skin-name').val();
     $('#wp-skins-skin-name').val('');
     if ('string' === typeof wpSkins.renameSkin) {
@@ -76,13 +92,12 @@ jQuery(function($) {
       $('#wp-skins-save-skin').text('Save skin');
     } else {
       values = {};
-      $.each(wp.customize.settings.settings, function(k, v) {
+      supportedSettingTypes = ['theme_mod'];
+      $.each(wpSkins.settingsMaps, function(setID, conID) {
         var val;
-        if (v && v.type === 'theme_mod') {
-          val = wpSkins.get(k);
-          if (val !== 'wp_skins_no_value') {
-            return values[k] = val;
-          }
+        val = wpSkins.get(conID);
+        if (val !== 'wp_skins_no_value') {
+          return values[setID] = val;
         }
       });
       wpSkins.addSkin(skinName, values);
@@ -102,8 +117,8 @@ jQuery(function($) {
       settings = wpSkins.data[skin];
       if (settings) {
         if (confirm('Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!')) {
-          return $.each(settings, function(k, v) {
-            return wpSkins.set(k, v);
+          return $.each(settings, function(setID, value) {
+            return wpSkins.set(wpSkins.settingsMaps[setID], value);
           });
         }
       }
@@ -117,6 +132,7 @@ jQuery(function($) {
     $('#wp-skins-save-skin').text('Rename');
     return wpSkins.showSaveDlg();
   };
+  wpSkins.prepMaps();
   $('#customize-header-actions').prepend($('<a/>').addClass('button button-primary').attr({
     id: 'wp-skins-save-dialog',
     title: 'Save as a skin'

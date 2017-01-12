@@ -42,9 +42,6 @@ class WP_Skins_Admin {
 		$this->url     =   WP_Skins::$url;
 		$this->path    =   WP_Skins::$path;
 		$this->version =   WP_Skins::$version;
-
-		add_action( 'customize_register', array( $this, 'customize_register' ) );
-		add_action( 'wp_ajax_wp_skins_save', array( $this, 'ajax_wp_skins_save' ) );
 	} // End __construct()
 
 	/**
@@ -97,25 +94,6 @@ class WP_Skins_Admin {
 	}
 
 	/**
-	 * AJAX action to save skins data
-	 */
-	public function ajax_wp_skins_save() {
-		if ( current_user_can( 'manage_options' ) && ! empty( $_POST['skins'] ) && ! empty( $_POST['theme'] ) ) {
-			$theme = $_POST['theme'];
-			$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
-			if ( ! $skins ) {
-				$skins = array();
-			}
-			$skins[ $theme ] = $_POST['skins'];
-			if ( update_option( 'wp_skins_data', json_encode( $skins ) ) ) {
-				die( 'success' );
-			} else {
-				die( '' );
-			}
-		}
-	}
-
-	/**
 	 * Registers customizer elements
 	 * @param WP_Customize_Manager $wp_customize
 	 */
@@ -145,5 +123,59 @@ class WP_Skins_Admin {
 				'priority' => 7,
 			) ) );
 
+	}
+	/** Adds admin menu */
+	public function admin_menu() {
+		add_theme_page(
+			'WP Skins',
+			'WP Skins',
+			'manage_options',
+			$this->token,
+			function () {
+				include dirname( __FILE__ ) . '/tpl-settings.php';
+			}
+		);
+	}
+
+	/** AJAX action to save skins data */
+	public function ajax_wp_skins_save() {
+		if ( current_user_can( 'manage_options' ) && ! empty( $_POST['skins'] ) && ! empty( $_POST['theme'] ) ) {
+			$theme = $_POST['theme'];
+			$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
+			if ( ! $skins ) {
+				$skins = array();
+			}
+			$skins[ $theme ] = $_POST['skins'];
+			if ( update_option( 'wp_skins_data', json_encode( $skins ) ) ) {
+				die( 'success' );
+			} else {
+				die( '' );
+			}
+		}
+	}
+
+	/** AJAX action to export skins data */
+	public function ajax_wp_skins_export() {
+		die( get_option( 'wp_skins_data', '{}' ) );
+	}
+
+	/** AJAX action to import skins data */
+	public function ajax_wp_skins_import() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			die( 'failed: You don\'t have permission to manage options.' );
+		}
+
+		$_POST['json'] = stripslashes( $_POST['json'] );
+		if ( empty( $_POST['json'] ) || ! json_decode( $_POST['json'], 'assoc_array' ) ) {
+			die( 'failed: File contains no data.' . $_POST['json'] );
+		}
+
+		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpskins_import_settings' ) ) {
+			die( 'failed: Nonce validation failed.' );
+		}
+
+		update_option( 'wp_skins_data', $_POST['json'] );
+
+		die( 'success: Skins successfully imported from the file.' );
 	}
 }

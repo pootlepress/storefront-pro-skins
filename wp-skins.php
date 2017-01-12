@@ -94,6 +94,11 @@ class WP_Skins{
 
 		//Enqueue admin end JS and CSS
 		add_action( 'customize_controls_print_footer_scripts',	array( $this->admin, 'enqueue' ) );
+		add_action( 'customize_register',						array( $this->admin, 'customize_register' ) );
+		add_action( 'admin_menu',								array( $this->admin, 'admin_menu' ) );
+		add_action( 'wp_ajax_wp_skins_save',					array( $this->admin, 'ajax_wp_skins_save' ) );
+		add_action( 'wp_ajax_wp_skins_export',					array( $this->admin, 'ajax_wp_skins_export' ) );
+		add_action( 'wp_ajax_wp_skins_import',					array( $this->admin, 'ajax_wp_skins_import' ) );
 
 	}
 
