@@ -17,7 +17,9 @@ jQuery(function($) {
   wpSkins.$wrap = $('#wp-skins-wrap');
   wpSkins.settingsMaps = {};
   wpSkins.prepMaps = function() {
+    var count;
     wpSkins.settingsMaps = {};
+    count = 0;
     return $.each(wp.customize.settings.controls, function(k, control) {
       var setting, settingId;
       if (control && control.settings && control.settings["default"]) {
@@ -25,10 +27,12 @@ jQuery(function($) {
         if (wp.customize.settings.settings[settingId]) {
           setting = wp.customize.settings.settings[settingId];
           if ('theme_mod' === setting.type) {
-            return wpSkins.settingsMaps[settingId] = control.id;
+            count++;
+            wpSkins.settingsMaps[settingId] = k;
           }
         }
       }
+      return void 0;
     });
   };
   wpSkins.get = function(id) {
@@ -79,7 +83,7 @@ jQuery(function($) {
     return wpSkins.$dlg.hide();
   };
   wpSkins.saveSkinButton = function() {
-    var skinName, supportedSettingTypes, values;
+    var count, skinName, values;
     skinName = $('#wp-skins-skin-name').val();
     $('#wp-skins-skin-name').val('');
     if ('string' === typeof wpSkins.renameSkin) {
@@ -91,14 +95,16 @@ jQuery(function($) {
       }
       $('#wp-skins-save-skin').text('Save skin');
     } else {
+      count = 0;
       values = {};
-      supportedSettingTypes = ['theme_mod'];
       $.each(wpSkins.settingsMaps, function(setID, conID) {
         var val;
+        count++;
         val = wpSkins.get(conID);
         if (val !== 'wp_skins_no_value') {
-          return values[setID] = val;
+          values[setID] = val;
         }
+        return void 0;
       });
       wpSkins.addSkin(skinName, values);
     }
@@ -118,7 +124,8 @@ jQuery(function($) {
       if (settings) {
         if (confirm('Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!')) {
           return $.each(settings, function(setID, value) {
-            return wpSkins.set(wpSkins.settingsMaps[setID], value);
+            wpSkins.set(wpSkins.settingsMaps[setID], value);
+            return void 0;
           });
         }
       }

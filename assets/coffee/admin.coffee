@@ -26,16 +26,20 @@ jQuery ($) ->
 	# Method: Get setting value
 	wpSkins.prepMaps = ->
 		wpSkins.settingsMaps = {} # Reset maps
+		count = 0
 		$.each( wp.customize.settings.controls, (k, control) ->
 			if ( control && control.settings && control.settings.default ) # Control has a setting ID
 				settingId = control.settings.default
 				if ( wp.customize.settings.settings[ settingId ] ) # Setting for setting ID exists
 					setting = wp.customize.settings.settings[ settingId ]
 					if 'theme_mod' is setting.type # Setting type is theme_mod
-						wpSkins.settingsMaps[ settingId ] = control.id
+						count++
+						wpSkins.settingsMaps[ settingId ] = k
+			undefined
 		)
+		#console.log(count + ' settings mapped')
 
-# Method: Get setting value
+	# Method: Get setting value
 	wpSkins.get = ( id ) ->
 		return if wp.customize.control.value( id ) then wp.customize.control.value( id ).setting.get() else 'wp_skins_no_value'
 
@@ -100,13 +104,16 @@ jQuery ($) ->
 				wpSkins.refreshSkinControl();
 			$( '#wp-skins-save-skin' ).text( 'Save skin' )
 		else
+			count = 0
 			values = {}
-			supportedSettingTypes = [ 'theme_mod' ]
 			$.each( wpSkins.settingsMaps, ( setID, conID ) ->
+				count++
 				val = wpSkins.get( conID ) # Get data with control ID
 				if ( val != 'wp_skins_no_value' )
 					values[ setID ] = val # Set data with setting ID
+				undefined
 			)
+			#console.log(count + ' settings saved')
 			wpSkins.addSkin( skinName, values )
 		wpSkins.closeSaveDlg()
 
@@ -125,6 +132,7 @@ jQuery ($) ->
 				if ( confirm 'Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!' )
 					$.each( settings, ( setID, value ) ->
 						wpSkins.set( wpSkins.settingsMaps[ setID ], value )
+						undefined
 					)
 
 	# Method: Clicked skin
