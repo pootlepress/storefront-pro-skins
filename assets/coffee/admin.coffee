@@ -27,17 +27,19 @@ jQuery ($) ->
 	wpSkins.prepMaps = ->
 		wpSkins.settingsMaps = {} # Reset maps
 		count = 0
+		supportedTypes = [ 'theme_mod', 'option' ]
 		$.each( wp.customize.settings.controls, (k, control) ->
 			if ( control && control.settings && control.settings.default ) # Control has a setting ID
 				settingId = control.settings.default
 				if ( wp.customize.settings.settings[ settingId ] ) # Setting for setting ID exists
 					setting = wp.customize.settings.settings[ settingId ]
-					if 'theme_mod' is setting.type # Setting type is theme_mod
-						count++
-						wpSkins.settingsMaps[ settingId ] = k
+					if 0 > settingId.indexOf 'wp_skins' # skip wp skins settings
+						if setting.type in supportedTypes
+							count++
+							wpSkins.settingsMaps[ settingId ] = k
 			undefined
 		)
-		#console.log(count + ' settings mapped')
+		console.log(count + ' settings mapped')
 
 	# Method: Get setting value
 	wpSkins.get = ( id ) ->
@@ -113,7 +115,7 @@ jQuery ($) ->
 					values[ setID ] = val # Set data with setting ID
 				undefined
 			)
-			#console.log(count + ' settings saved')
+			console.log(count + ' settings saved')
 			wpSkins.addSkin( skinName, values )
 		wpSkins.closeSaveDlg()
 
@@ -131,7 +133,14 @@ jQuery ($) ->
 			if ( settings )
 				if ( confirm 'Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!' )
 					$.each( settings, ( setID, value ) ->
-						wpSkins.set( wpSkins.settingsMaps[ setID ], value )
+						settingId = if 'string' is typeof wpSkins.settingsMaps[ setID ]
+						then wpSkins.settingsMaps[ setID ]
+						else wpSkins.settingsMaps[ setID + ']' ]
+
+						if settingId
+							wpSkins.set( settingId, value )
+						else
+							console.log 'Couldn\'t find setting for ' + setID
 						undefined
 					)
 

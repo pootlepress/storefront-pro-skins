@@ -5,7 +5,8 @@
  * @package WP_Skins
  * @version 1.0.0
  */
-var wpSkins;
+var wpSkins,
+  indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
 wpSkins = 'object' === typeof wpSkins && wpSkins ? wpSkins : {};
 
@@ -17,23 +18,27 @@ jQuery(function($) {
   wpSkins.$wrap = $('#wp-skins-wrap');
   wpSkins.settingsMaps = {};
   wpSkins.prepMaps = function() {
-    var count;
+    var count, supportedTypes;
     wpSkins.settingsMaps = {};
     count = 0;
-    return $.each(wp.customize.settings.controls, function(k, control) {
-      var setting, settingId;
+    supportedTypes = ['theme_mod', 'option'];
+    $.each(wp.customize.settings.controls, function(k, control) {
+      var ref, setting, settingId;
       if (control && control.settings && control.settings["default"]) {
         settingId = control.settings["default"];
         if (wp.customize.settings.settings[settingId]) {
           setting = wp.customize.settings.settings[settingId];
-          if ('theme_mod' === setting.type) {
-            count++;
-            wpSkins.settingsMaps[settingId] = k;
+          if (0 > settingId.indexOf('wp_skins')) {
+            if (ref = setting.type, indexOf.call(supportedTypes, ref) >= 0) {
+              count++;
+              wpSkins.settingsMaps[settingId] = k;
+            }
           }
         }
       }
       return void 0;
     });
+    return console.log(count + ' settings mapped');
   };
   wpSkins.get = function(id) {
     if (wp.customize.control.value(id)) {
@@ -106,6 +111,7 @@ jQuery(function($) {
         }
         return void 0;
       });
+      console.log(count + ' settings saved');
       wpSkins.addSkin(skinName, values);
     }
     return wpSkins.closeSaveDlg();
@@ -124,7 +130,13 @@ jQuery(function($) {
       if (settings) {
         if (confirm('Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!')) {
           return $.each(settings, function(setID, value) {
-            wpSkins.set(wpSkins.settingsMaps[setID], value);
+            var settingId;
+            settingId = 'string' === typeof wpSkins.settingsMaps[setID] ? wpSkins.settingsMaps[setID] : wpSkins.settingsMaps[setID + ']'];
+            if (settingId) {
+              wpSkins.set(settingId, value);
+            } else {
+              console.log('Couldn\'t find setting for ' + setID);
+            }
             return void 0;
           });
         }
