@@ -48,6 +48,9 @@ jQuery(function($) {
     }
   };
   wpSkins.set = function(id, val) {
+    if (val === 'false') {
+      val = '';
+    }
     if (wp.customize.control.value(id)) {
       return wp.customize.control.value(id).setting.set(val);
     } else {
@@ -107,8 +110,11 @@ jQuery(function($) {
         count++;
         val = wpSkins.get(conID);
         if (val !== 'wp_skins_no_value') {
-          values[setID] = val;
+          if (val === 'false') {
+            val = '';
+          }
         }
+        values[setID] = val;
         return void 0;
       });
       console.log(count + ' settings saved');

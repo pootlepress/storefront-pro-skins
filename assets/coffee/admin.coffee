@@ -47,6 +47,7 @@ jQuery ($) ->
 
 	# Method: Set setting value
 	wpSkins.set = ( id, val ) ->
+		if val is 'false' then val = ''
 		return if wp.customize.control.value( id ) then wp.customize.control.value( id ).setting.set( val ) else console.log( 'Couldn\'t set ' + id )
 
 	# Method: Prepare skins control
@@ -112,7 +113,8 @@ jQuery ($) ->
 				count++
 				val = wpSkins.get( conID ) # Get data with control ID
 				if ( val != 'wp_skins_no_value' )
-					values[ setID ] = val # Set data with setting ID
+					if val is 'false' then val = ''
+				values[ setID ] = val # Set data with setting ID
 				undefined
 			)
 			console.log(count + ' settings saved')
