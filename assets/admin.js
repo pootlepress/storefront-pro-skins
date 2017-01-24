@@ -168,7 +168,7 @@ jQuery(function($) {
   $('#wp-skins-save-dialog').click(wpSkins.showSaveDlg);
   $('#wp-skins-save-skin').click(wpSkins.saveSkinButton);
   wpSkins.$skinApplyConfirmDialog.find('.button-primary').click(function() {
-    $.each(wpSkins.$skinApplyConfirmDialog.data('settings', settings), function(setID, value) {
+    $.each(wpSkins.$skinApplyConfirmDialog.data('settings'), function(setID, value) {
       var settingId;
       settingId = 'string' === typeof wpSkins.settingsMaps[setID] ? wpSkins.settingsMaps[setID] : wpSkins.settingsMaps[setID + ']'];
       if (settingId) {

@@ -186,7 +186,7 @@ jQuery ($) ->
 
 	# Handlers: Save skin button
 	wpSkins.$skinApplyConfirmDialog.find( '.button-primary' ).click ()->
-		$.each( wpSkins.$skinApplyConfirmDialog.data( 'settings', settings ), ( setID, value ) ->
+		$.each( wpSkins.$skinApplyConfirmDialog.data( 'settings' ), ( setID, value ) ->
 			settingId = if 'string' is typeof wpSkins.settingsMaps[ setID ]
 			then wpSkins.settingsMaps[ setID ]
 			else wpSkins.settingsMaps[ setID + ']' ]
