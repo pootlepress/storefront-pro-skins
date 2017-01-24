@@ -178,6 +178,7 @@ jQuery(function($) {
       }
       return void 0;
     });
+    wpSkins.$skinApplyConfirmDialog.hide();
     return wpSkins.notice('Skin applied.');
   });
   wpSkins.$orle.click(wpSkins.closeSaveDlg);

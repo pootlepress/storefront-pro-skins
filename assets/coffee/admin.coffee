@@ -197,6 +197,7 @@ jQuery ($) ->
 				console.log 'Couldn\'t find setting for ' + setID
 			undefined
 		)
+		wpSkins.$skinApplyConfirmDialog.hide()
 		wpSkins.notice 'Skin applied.'
 
 	# Handler: Overlay close dialog
