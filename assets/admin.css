@@ -1,9 +1,16 @@
 /** Plugin admin end styles  @package WP_Skins @version 1.0.0 */
 #customize-header-actions #wp-skins-save-dialog { position: absolute; top: 0; left: 52px; }
 
-#wp-skins-overlay, #wp-skins-dialog { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.5); z-index: 97; }
+#wp-skins-apply-confirm, #wp-skins-overlay, #wp-skins-notice, #wp-skins-dialog { position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: auto; background: rgba(0, 0, 0, 0.5); z-index: 97; }
 
-#wp-skins-dialog { background: none; height: 39px; width: 90vw; max-width: 520px; margin: auto; }
+#wp-skins-apply-confirm { height: 70px; width: 520px; padding: 1em; background: #fff; border: 1px outset #aaa; }
+#wp-skins-apply-confirm button, #wp-skins-apply-confirm p { margin: 1em; float: right; }
+
+#wp-skins-notice { height: 52px; width: 520px; text-align: center; background: none; }
+
+#wp-skins-notice-message { padding: 1em 1.6em; display: inline-block; font: 200 25px lato, sans-serif; background: #0085ba; color: #fff; border-radius: 99px; }
+
+#wp-skins-dialog { background: none; height: 39px; width: 90vw; max-width: 520px; }
 #wp-skins-dialog > input, #wp-skins-dialog > button { text-align: center; line-height: 35px; padding: 0; margin: 0; box-sizing: border-box; height: auto; box-shadow: none; float: left; width: 21%; border-radius: 0 5px 5px 0; }
 #wp-skins-dialog input { padding: 0 0.5em; text-align: left; width: 79%; border-radius: 5px 0 0 5px; }
 #wp-skins-dialog .notice.already-exists { width: 100%; position: absolute; bottom: 124%; padding: 1em; box-sizing: border-box; left: 0; margin: 0; border-radius: 5px; }

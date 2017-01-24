@@ -10,21 +10,49 @@
 	left: 52px;
 }
 
-#wp-skins-overlay, #wp-skins-dialog {
+#wp-skins-apply-confirm,#wp-skins-overlay, #wp-skins-notice, #wp-skins-dialog {
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
+	margin: auto;
 	background: rgba(0,0,0,0.5);
 	z-index: 97;
 }
+#wp-skins-apply-confirm {
+	height: 70px;
+	width: 520px;
+	padding: 1em;
+	background: #fff;
+	border: 1px outset #aaa;
+	button, p {
+		margin: 1em;
+		float:right;
+	}
+}
+
+#wp-skins-notice {
+	height: 52px;
+	width: 520px;
+	text-align: center;
+	background: none;
+}
+
+#wp-skins-notice-message {
+	padding: 1em 1.6em;
+	display: inline-block;
+	font: 200 25px lato, sans-serif;
+	background: #0085ba;
+	color: #fff;
+	border-radius: 99px;
+}
+
 #wp-skins-dialog {
 	background: none;
 	height: 39px;
 	width: 90vw;
 	max-width: 520px;
-	margin: auto;
 	> input, > button {
 		text-align: center;
 		line-height: 35px;

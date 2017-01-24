@@ -76,6 +76,12 @@ class WP_Skins_Admin {
 			<input placeholder="Skin name" type="text" id="wp-skins-skin-name">
 			<button id="wp-skins-save-skin" class="button button-primary">Save skin</button>
 		</div>
+		<div id="wp-skins-notice" style="display: none;">This is a notice</div>
+		<div id="wp-skins-apply-confirm" style="display: none;">
+			<p>Are you sure you want to apply "<span class="skin-name"></span>" skin? Your current changes will be lost!
+			<button id="wp-skins-save-skin" class="button button-primary">Yeah, Apply skin</button>
+			<button id="wp-skins-save-skin" onclick="jQuery(this).parent.hide()" class="button">Cancel</button>
+		</div>
 		<?php
 
 		$token = $this->token;

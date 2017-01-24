@@ -20,6 +20,9 @@ jQuery ($) ->
 	# Element: Skins control wrapper
 	wpSkins.$wrap = $ '#wp-skins-wrap'
 
+	# Element: Skins control wrapper
+	wpSkins.$skinApplyConfirmDialog = $ '#wp-skins-apply-confirm'
+
 	# Property: Settings maps
 	wpSkins.settingsMaps = {}
 
@@ -27,7 +30,7 @@ jQuery ($) ->
 	wpSkins.prepMaps = ->
 		wpSkins.settingsMaps = {} # Reset maps
 		count = 0
-		supportedTypes = [ 'theme_mod', 'option' ]
+		supportedTypes = [ 'theme_mod', ]
 		$.each( wp.customize.settings.controls, (k, control) ->
 			if ( control && control.settings && control.settings.default ) # Control has a setting ID
 				settingId = control.settings.default
@@ -50,6 +53,18 @@ jQuery ($) ->
 		if val is 'false' then val = ''
 		return if wp.customize.control.value( id ) then wp.customize.control.value( id ).setting.set( val ) else console.log( 'Couldn\'t set ' + id )
 
+	# Method: Display notice
+	wpSkins.notice = ( message ) ->
+		if ! message then return;
+		$ '#wp-skins-notice'
+		.html( '<div id="wp-skins-notice-message">' + message + '</div>' ).fadeIn(250)
+		setTimeout(
+			() ->
+				$ '#wp-skins-notice'
+				.html('').fadeOut(250)
+		,1100
+		)
+
 	# Method: Prepare skins control
 	wpSkins.refreshSkinControl = () ->
 		wpSkins.$wrap.html ''
@@ -62,6 +77,7 @@ jQuery ($) ->
 		$.post( ajaxurl, data, (response) -> )
 
 		$.each( wpSkins.data, ( name, v ) ->
+
 			wpSkins.$wrap.append(
 				$ '<h3></h3>'
 				.addClass 'wp-skin-button'
@@ -106,6 +122,7 @@ jQuery ($) ->
 				delete wpSkins.renameSkin
 				wpSkins.refreshSkinControl();
 			$( '#wp-skins-save-skin' ).text( 'Save skin' )
+			wpSkins.notice 'Skin Renamed'
 		else
 			count = 0
 			values = {}
@@ -114,12 +131,14 @@ jQuery ($) ->
 				val = wpSkins.get( conID ) # Get data with control ID
 				if ( val != 'wp_skins_no_value' )
 					if val is 'false' then val = ''
-				values[ setID ] = val # Set data with setting ID
+					if typeof val is 'string'
+						values[ setID ] = val # Set data with setting ID
 				undefined
 			)
 			console.log(count + ' settings saved')
 			wpSkins.addSkin( skinName, values )
-		wpSkins.closeSaveDlg()
+			wpSkins.closeSaveDlg()
+			wpSkins.notice 'Skin Saved'
 
 	# Method: Clicked skin
 	wpSkins.clickedSkin = ( e ) ->
@@ -133,18 +152,11 @@ jQuery ($) ->
 		else if $t.is( '.wp-skin-button' )
 			settings = wpSkins.data[ skin ]
 			if ( settings )
-				if ( confirm 'Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!' )
-					$.each( settings, ( setID, value ) ->
-						settingId = if 'string' is typeof wpSkins.settingsMaps[ setID ]
-						then wpSkins.settingsMaps[ setID ]
-						else wpSkins.settingsMaps[ setID + ']' ]
-
-						if settingId
-							wpSkins.set( settingId, value )
-						else
-							console.log 'Couldn\'t find setting for ' + setID
-						undefined
-					)
+				wpSkins.$skinApplyConfirmDialog
+				.data( 'skin', skin )
+				.data( 'settings', settings )
+				.show().find '.skin-name'
+				.html skin
 
 	# Method: Clicked skin
 	wpSkins.doubleClickedSkin = ( e ) ->
@@ -171,6 +183,21 @@ jQuery ($) ->
 
 	# Handlers: Save skin button
 	$( '#wp-skins-save-skin' ).click wpSkins.saveSkinButton
+
+	# Handlers: Save skin button
+	wpSkins.$skinApplyConfirmDialog.find( '.button-primary' ).click ()->
+		$.each( wpSkins.$skinApplyConfirmDialog.data( 'settings', settings ), ( setID, value ) ->
+			settingId = if 'string' is typeof wpSkins.settingsMaps[ setID ]
+			then wpSkins.settingsMaps[ setID ]
+			else wpSkins.settingsMaps[ setID + ']' ]
+
+			if settingId
+				wpSkins.set( settingId, value )
+			else
+				console.log 'Couldn\'t find setting for ' + setID
+			undefined
+		)
+		wpSkins.notice 'Skin applied.'
 
 	# Handler: Overlay close dialog
 	wpSkins.$orle.click wpSkins.closeSaveDlg

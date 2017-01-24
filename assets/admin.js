@@ -16,12 +16,13 @@ jQuery(function($) {
   wpSkins.$orle = $('#wp-skins-overlay');
   wpSkins.$dlg = $('#wp-skins-dialog');
   wpSkins.$wrap = $('#wp-skins-wrap');
+  wpSkins.$skinApplyConfirmDialog = $('#wp-skins-apply-confirm');
   wpSkins.settingsMaps = {};
   wpSkins.prepMaps = function() {
     var count, supportedTypes;
     wpSkins.settingsMaps = {};
     count = 0;
-    supportedTypes = ['theme_mod', 'option'];
+    supportedTypes = ['theme_mod'];
     $.each(wp.customize.settings.controls, function(k, control) {
       var ref, setting, settingId;
       if (control && control.settings && control.settings["default"]) {
@@ -56,6 +57,15 @@ jQuery(function($) {
     } else {
       return console.log('Couldn\'t set ' + id);
     }
+  };
+  wpSkins.notice = function(message) {
+    if (!message) {
+      return;
+    }
+    $('#wp-skins-notice').html('<div id="wp-skins-notice-message">' + message + '</div>').fadeIn(250);
+    return setTimeout(function() {
+      return $('#wp-skins-notice').html('').fadeOut(250);
+    }, 1100);
   };
   wpSkins.refreshSkinControl = function() {
     var data;
@@ -102,6 +112,7 @@ jQuery(function($) {
         wpSkins.refreshSkinControl();
       }
       $('#wp-skins-save-skin').text('Save skin');
+      return wpSkins.notice('Skin Renamed');
     } else {
       count = 0;
       values = {};
@@ -113,14 +124,17 @@ jQuery(function($) {
           if (val === 'false') {
             val = '';
           }
+          if (typeof val === 'string') {
+            values[setID] = val;
+          }
         }
-        values[setID] = val;
         return void 0;
       });
       console.log(count + ' settings saved');
       wpSkins.addSkin(skinName, values);
+      wpSkins.closeSaveDlg();
+      return wpSkins.notice('Skin Saved');
     }
-    return wpSkins.closeSaveDlg();
   };
   wpSkins.clickedSkin = function(e) {
     var $t, settings, skin;
@@ -134,18 +148,7 @@ jQuery(function($) {
     } else if ($t.is('.wp-skin-button')) {
       settings = wpSkins.data[skin];
       if (settings) {
-        if (confirm('Are you sure you want to apply "' + skin + '" skin? Your current changes will be lost!')) {
-          return $.each(settings, function(setID, value) {
-            var settingId;
-            settingId = 'string' === typeof wpSkins.settingsMaps[setID] ? wpSkins.settingsMaps[setID] : wpSkins.settingsMaps[setID + ']'];
-            if (settingId) {
-              wpSkins.set(settingId, value);
-            } else {
-              console.log('Couldn\'t find setting for ' + setID);
-            }
-            return void 0;
-          });
-        }
+        return wpSkins.$skinApplyConfirmDialog.data('skin', skin).data('settings', settings).show().find('.skin-name').html(skin);
       }
     }
   };
@@ -164,6 +167,19 @@ jQuery(function($) {
   }).html('Save skin'));
   $('#wp-skins-save-dialog').click(wpSkins.showSaveDlg);
   $('#wp-skins-save-skin').click(wpSkins.saveSkinButton);
+  wpSkins.$skinApplyConfirmDialog.find('.button-primary').click(function() {
+    $.each(wpSkins.$skinApplyConfirmDialog.data('settings', settings), function(setID, value) {
+      var settingId;
+      settingId = 'string' === typeof wpSkins.settingsMaps[setID] ? wpSkins.settingsMaps[setID] : wpSkins.settingsMaps[setID + ']'];
+      if (settingId) {
+        wpSkins.set(settingId, value);
+      } else {
+        console.log('Couldn\'t find setting for ' + setID);
+      }
+      return void 0;
+    });
+    return wpSkins.notice('Skin applied.');
+  });
   wpSkins.$orle.click(wpSkins.closeSaveDlg);
   return wpSkins.$wrap.click(function(e) {
     if (wpSkins.timesClickedSkin === 1) {
