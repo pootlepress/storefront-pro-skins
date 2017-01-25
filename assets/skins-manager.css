@@ -1,0 +1,35 @@
+.export-skins,
+.active-skins,
+.inactive-skins {
+	width:43%;
+	float: left;
+	min-height: 500px;
+	border: 1px dotted #ccc;
+	padding: 2%;
+	margin: 2.5% 0;
+}
+
+.export-skins {
+	border: 2px dashed #ccc;
+	width: 95%;
+	min-height: 0;
+	font: 25px/160px sans-serif;
+	color: #aaa;
+	text-align: center;
+}
+
+.active-skins {
+	margin-right: 5%;
+}
+
+.active-skins .wp-skin-button,
+.inactive-skins .wp-skin-button {
+	max-width: 340px;
+	font-size: 16px;
+	padding: 0.5em 1em;
+	letter-spacing: 1px;
+	font-weight: 300;
+	height: auto;
+	display: block;
+	margin:1em 0;
+}

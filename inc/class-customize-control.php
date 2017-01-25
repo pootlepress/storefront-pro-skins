@@ -18,7 +18,8 @@ class WP_Skins_Customize_Control extends WP_Customize_Control {
 			<?php
 			if ( $skins && ! empty( $skins[ $theme ] ) ) {
 				foreach ( $skins[ $theme ] as $name => $val ) {
-					echo "<h3 class='wp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
+					if ( $name[0] != '_' )
+						echo "<h3 class='wp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
 				}
 			} else {
 				echo "<span class='no-skins'>You don't have any skins for '$theme' theme...</span>";

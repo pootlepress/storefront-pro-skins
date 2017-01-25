@@ -171,12 +171,7 @@ jQuery ($) ->
 
 	# DOM Manipulation
 	$ '#customize-header-actions'
-	.prepend(
-		$ '<a/>'
-		.addClass 'button button-primary'
-		.attr( { id: 'wp-skins-save-dialog', title: 'Save as a skin' } )
-		.html 'Save skin'
-	)
+	.after( $ '#wp-skins-actions' )
 
 	# Handlers: Save skin dialog open button
 	$( '#wp-skins-save-dialog' ).click wpSkins.showSaveDlg

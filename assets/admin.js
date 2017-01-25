@@ -161,10 +161,7 @@ jQuery(function($) {
     return wpSkins.showSaveDlg();
   };
   wpSkins.prepMaps();
-  $('#customize-header-actions').prepend($('<a/>').addClass('button button-primary').attr({
-    id: 'wp-skins-save-dialog',
-    title: 'Save as a skin'
-  }).html('Save skin'));
+  $('#customize-header-actions').after($('#wp-skins-actions'));
   $('#wp-skins-save-dialog').click(wpSkins.showSaveDlg);
   $('#wp-skins-save-skin').click(wpSkins.saveSkinButton);
   wpSkins.$skinApplyConfirmDialog.find('.button-primary').click(function() {

@@ -82,6 +82,16 @@ class WP_Skins_Admin {
 			<button id="wp-skins-save-skin" class="button button-primary">Yeah, Apply skin</button>
 			<button id="wp-skins-save-skin" onclick="jQuery(this).parent.hide()" class="button">Cancel</button>
 		</div>
+
+		<div id="wp-skins-actions" class="wp-full-overlay-header">
+			<a id="wp-skins-view" class="button view-skins"
+			   onclick="wp.customize.section.value( 'wp_skins_section' ).expand()">
+				<span class="dashicons dashicons-admin-appearance"></span> View skins
+			</a>
+			<a class="button button-primary" id="wp-skins-save-dialog" title="Save as a skin">
+				<span class="dashicons dashicons-plus-alt"></span> Save skin
+			</a>
+		</div>
 		<?php
 
 		$token = $this->token;
@@ -183,5 +193,19 @@ class WP_Skins_Admin {
 		update_option( 'wp_skins_data', $_POST['json'] );
 
 		die( 'success: Skins successfully imported from the file.' );
+	}
+
+	/**
+	 * Adds front end stylesheet and js
+	 * @action wp_enqueue_scripts
+	 */
+	public function admin_enqueue() {
+		if ( ! filter_input( INPUT_GET, 'page' ) == 'wp-skins' ) return;
+
+		$token = $this->token;
+		$url = $this->url;
+
+		wp_enqueue_style( $token . '-css', $url . '/assets/skins-manager.css' );
+		wp_enqueue_script( $token . '-js', $url . '/assets/skins-manager.js', array( 'jquery' ) );
 	}
 }

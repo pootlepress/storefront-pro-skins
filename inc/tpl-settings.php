@@ -96,10 +96,12 @@
 					fr.readAsText( file );
 				} else {
 					// Handle errors here
-					alert( "File not selected or broser incompatible." )
+					alert( "File not selected or browser incompatible." )
 				}
 			} );
 		} )( jQuery );
 	</script>
+
+<?php include 'tpl-skins-manager.php'; ?>
 
 </div><!-- .wrap -->

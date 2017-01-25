@@ -24,4 +24,11 @@ h3.wp-skin-button:hover { opacity: 1; }
 h3.wp-skin-button .delete { position: absolute; top: 50%; margin-top: -10px; right: 0.5em; }
 h3.wp-skin-button ~ .no-skins { display: none; }
 
+.wp-full-overlay-sidebar .wp-full-overlay-sidebar-content { top: 90px; }
+
+#wp-skins-actions { position: absolute; top: 45px; left: 0; right: 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+#wp-skins-actions .button { float: right; margin: 7px 0; padding: 0 10px 0 7px; }
+#wp-skins-actions .button .dashicons { vertical-align: middle; margin-bottom: 2px; }
+#wp-skins-actions #wp-skins-view { float: left; }
+
 /*# sourceMappingURL=admin.css.map */

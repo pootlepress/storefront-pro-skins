@@ -116,3 +116,29 @@ h3.wp-skin-button {
 		display: none;
 	}
 }
+
+.wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
+	top: 90px;
+}
+
+#wp-skins-actions {
+	position: absolute;
+	top: 45px;
+	left: 0;
+	right: 0;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	.button {
+		float:right;
+		margin: 7px 0;
+		padding: 0 10px 0 7px;
+		.dashicons {
+			vertical-align: middle;
+			margin-bottom: 2px;
+		}
+	}
+
+	#wp-skins-view {
+		float: left;
+	}
+}
