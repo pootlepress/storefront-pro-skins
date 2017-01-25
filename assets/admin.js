@@ -67,7 +67,7 @@ jQuery(function($) {
       return $('#wp-skins-notice').html('').fadeOut(250);
     }, 1100);
   };
-  wpSkins.refreshSkinControl = function() {
+  wpSkins.refreshSkinControl = function(msg) {
     var data;
     wpSkins.$wrap.html('');
     data = {
@@ -75,7 +75,15 @@ jQuery(function($) {
       'skins': wpSkins.data,
       'theme': wpSkins.theme
     };
-    $.post(ajaxurl, data, function(response) {});
+    $.post(ajaxurl, data, function(r) {
+      console.log('WPSkins AJAX Success:', r);
+      if (msg) {
+        return wpSkins.notice(msg);
+      }
+    }).fail(function(r) {
+      console.log('WPSkins AJAX Failed:', r);
+      return wpSkins.notice('Error: Could not connect to server');
+    });
     $.each(wpSkins.data, function(name, v) {
       return wpSkins.$wrap.append($('<h3></h3>').addClass('wp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
     });
@@ -89,7 +97,7 @@ jQuery(function($) {
     } else {
       wpSkins.data[name] = values;
     }
-    return wpSkins.refreshSkinControl();
+    return wpSkins.refreshSkinControl('Skin saved');
   };
   wpSkins.showSaveDlg = function() {
     wpSkins.$;
@@ -109,7 +117,7 @@ jQuery(function($) {
         wpSkins.data[skinName] = wpSkins.data[wpSkins.renameSkin];
         delete wpSkins.data[wpSkins.renameSkin];
         delete wpSkins.renameSkin;
-        wpSkins.refreshSkinControl();
+        wpSkins.refreshSkinControl('Skin renamed');
       }
       $('#wp-skins-save-skin').text('Save skin');
       return wpSkins.notice('Skin Renamed');
@@ -132,8 +140,7 @@ jQuery(function($) {
       });
       console.log(count + ' settings saved');
       wpSkins.addSkin(skinName, values);
-      wpSkins.closeSaveDlg();
-      return wpSkins.notice('Skin Saved');
+      return wpSkins.closeSaveDlg();
     }
   };
   wpSkins.clickedSkin = function(e) {
@@ -143,7 +150,7 @@ jQuery(function($) {
     if ($t.is('.wp-skin-button .delete')) {
       if (confirm('Are you sure you want to delete "' + skin + '" skin?')) {
         delete wpSkins.data[skin];
-        return wpSkins.refreshSkinControl();
+        return wpSkins.refreshSkinControl('Skin deleted');
       }
     } else if ($t.is('.wp-skin-button')) {
       settings = wpSkins.data[skin];

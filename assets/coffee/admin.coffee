@@ -66,15 +66,20 @@ jQuery ($) ->
 		)
 
 	# Method: Prepare skins control
-	wpSkins.refreshSkinControl = () ->
+	wpSkins.refreshSkinControl = ( msg ) ->
 		wpSkins.$wrap.html ''
-		data = {
+		data =
 			'action': 'wp_skins_save'
 			'skins': wpSkins.data
 			'theme': wpSkins.theme
-		};
 
-		$.post( ajaxurl, data, (response) -> )
+		$.post( ajaxurl, data, (r) ->
+			console.log( 'WPSkins AJAX Success:', r )
+			if msg then wpSkins.notice msg
+		).fail (r) ->
+			console.log( 'WPSkins AJAX Failed:', r )
+			wpSkins.notice 'Error: Could not connect to server'
+
 
 		$.each( wpSkins.data, ( name, v ) ->
 
@@ -97,7 +102,7 @@ jQuery ($) ->
 				wpSkins.data[ name ] = values
 		else
 			wpSkins.data[ name ] = values
-		wpSkins.refreshSkinControl();
+		wpSkins.refreshSkinControl( 'Skin saved' );
 
 	# Method: Show skin save dialog
 	wpSkins.showSaveDlg = () ->
@@ -120,7 +125,7 @@ jQuery ($) ->
 				wpSkins.data[ skinName ] = wpSkins.data[ wpSkins.renameSkin ]
 				delete wpSkins.data[ wpSkins.renameSkin ]
 				delete wpSkins.renameSkin
-				wpSkins.refreshSkinControl();
+				wpSkins.refreshSkinControl( 'Skin renamed' );
 			$( '#wp-skins-save-skin' ).text( 'Save skin' )
 			wpSkins.notice 'Skin Renamed'
 		else
@@ -138,7 +143,7 @@ jQuery ($) ->
 			console.log(count + ' settings saved')
 			wpSkins.addSkin( skinName, values )
 			wpSkins.closeSaveDlg()
-			wpSkins.notice 'Skin Saved'
+			#wpSkins.notice 'Skin Saved'
 
 	# Method: Clicked skin
 	wpSkins.clickedSkin = ( e ) ->
@@ -148,7 +153,7 @@ jQuery ($) ->
 		if $t.is( '.wp-skin-button .delete' )
 			if confirm 'Are you sure you want to delete "' + skin + '" skin?'
 				delete wpSkins.data[ skin ]
-				wpSkins.refreshSkinControl();
+				wpSkins.refreshSkinControl( 'Skin deleted' );
 		else if $t.is( '.wp-skin-button' )
 			settings = wpSkins.data[ skin ]
 			if ( settings )

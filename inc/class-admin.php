@@ -79,8 +79,8 @@ class WP_Skins_Admin {
 		<div id="wp-skins-notice" style="display: none;">This is a notice</div>
 		<div id="wp-skins-apply-confirm" style="display: none;">
 			<p>Are you sure you want to apply "<span class="skin-name"></span>" skin? Your current changes will be lost!
-			<button id="wp-skins-save-skin" class="button button-primary">Yeah, Apply skin</button>
-			<button id="wp-skins-save-skin" onclick="jQuery(this).parent.hide()" class="button">Cancel</button>
+				<button id="wp-skins-save-skin" class="button button-primary">Yeah, Apply skin</button>
+				<button id="wp-skins-save-skin" onclick="jQuery(this).parent.hide()" class="button">Cancel</button>
 		</div>
 
 		<div id="wp-skins-actions" class="wp-full-overlay-header">
@@ -155,18 +155,26 @@ class WP_Skins_Admin {
 
 	/** AJAX action to save skins data */
 	public function ajax_wp_skins_save() {
-		if ( current_user_can( 'manage_options' ) && ! empty( $_POST['skins'] ) && ! empty( $_POST['theme'] ) ) {
-			$theme = $_POST['theme'];
-			$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
-			if ( ! $skins ) {
-				$skins = array();
-			}
-			$skins[ $theme ] = $_POST['skins'];
-			if ( update_option( 'wp_skins_data', json_encode( $skins ) ) ) {
-				die( 'success' );
-			} else {
-				die( '' );
-			}
+		if ( ! current_user_can( 'manage_options' ) ) {
+			die( "You don't have permission to manage options." );
+		}
+		if ( empty( $_POST['skins'] ) ) {
+			die( "Skins data required." );
+		}
+		if ( empty( $_POST['theme'] ) ) {
+			print_r($_POST);
+			die( 'Theme name required.' );
+		}
+		$theme = $_POST['theme'];
+		$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
+		if ( ! $skins ) {
+			$skins = array();
+		}
+		$skins[ $theme ] = $_POST['skins'];
+		if ( update_option( 'wp_skins_data', json_encode( $skins ) ) ) {
+			die( 'Success: Skins updated' );
+		} else {
+			die( 'Success: Skin data identical' );
 		}
 	}
 
