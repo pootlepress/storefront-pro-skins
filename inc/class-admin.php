@@ -154,19 +154,23 @@ class WP_Skins_Admin {
 
 	/** AJAX action to save skins data */
 	public function ajax_wp_skins_save() {
-		if ( ! current_user_can( 'manage_options' ) )
+		if ( ! current_user_can( 'manage_options' ) ) {
 			die( "You don't have permission to manage options." );
+		}
 
-		if ( empty( $_POST['skins'] ) )
+		if ( empty( $_POST['skins'] ) ) {
 			die( "Skins data required." );
+		}
 
-		$skins = $_POST['skins'];
-
-		if ( is_array( $skins ) )
+		if ( is_array( $skins ) ) {
 			$skins = json_encode( $skins );
+		} else {
+			$skins = stripslashes( $_POST['skins'] );
+		}
 
-		if ( update_option( 'wp_skins_data', $skins ) )
+		if ( update_option( 'wp_skins_data', $skins ) ) {
 			die( 'Success: Skins updated' );
+		}
 
 		die( 'Success: Skin data identical.' );
 	}
