@@ -4,8 +4,8 @@
 $skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
 $inactive_skins = $active_skins = '';
 
-if ( $skins && ! empty( $skins[ 'storefront' ] ) ) {
-	foreach ( $skins[ 'storefront' ] as $name => $val ) {
+if ( $skins && ! empty( $skins ) ) {
+	foreach ( $skins as $name => $val ) {
 		if ( $name[0] != '_' ) {
 			$active_skins .= "<a class='wp-skin-button button'>$name</a>";
 		} else {

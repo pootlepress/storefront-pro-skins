@@ -101,11 +101,10 @@ class WP_Skins_Admin {
 		wp_enqueue_script( $token . '-js', $url . '/assets/admin.js', array( 'jquery' ) );
 
 		$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
-		$theme = get_stylesheet();
 
 		wp_localize_script( $token . '-js', 'wpSkins', array(
-			'data'	=> ! $skins || empty( $skins[ $theme ] ) ? new stdClass() : $skins[ $theme ],
-			'theme'	=> $theme,
+			'data'	=> ! $skins ? new stdClass() : $skins,
+			'theme'	=> 'storefront',
 		) );
 	}
 
@@ -160,21 +159,14 @@ class WP_Skins_Admin {
 		}
 		if ( empty( $_POST['skins'] ) ) {
 			die( "Skins data required." );
+		} else if ( ! is_array( $_POST['skins'] ) ) {
+			die( "Skins data malformed." . print_awesome_r( $_POST['skins'], 1 ) );
 		}
-		if ( empty( $_POST['theme'] ) ) {
-			print_r($_POST);
-			die( 'Theme name required.' );
-		}
-		$theme = $_POST['theme'];
-		$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
-		if ( ! $skins ) {
-			$skins = array();
-		}
-		$skins[ $theme ] = $_POST['skins'];
-		if ( update_option( 'wp_skins_data', json_encode( $skins ) ) ) {
+		$skins = json_encode( $_POST['skins'] );
+		if ( update_option( 'wp_skins_data', $skins ) ) {
 			die( 'Success: Skins updated' );
 		} else {
-			die( 'Success: Skin data identical' );
+			die( 'Success: Skin data identical.' );
 		}
 	}
 

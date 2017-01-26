@@ -8,21 +8,20 @@ class WP_Skins_Customize_Control extends WP_Customize_Control {
 
 	function render_content() {
 		$skins = json_decode( $this->value(), 'array' );
-		$theme = get_stylesheet();
 		?>
 		<span class="customize-control-title">
-			Skins for '<?php echo $theme; ?>' theme
+			Skins for Storefront Pro
 		</span>
 		<hr>
 		<div id="wp-skins-wrap">
 			<?php
-			if ( $skins && ! empty( $skins[ $theme ] ) ) {
-				foreach ( $skins[ $theme ] as $name => $val ) {
+			if ( $skins ) {
+				foreach ( $skins as $name => $val ) {
 					if ( $name[0] != '_' )
 						echo "<h3 class='wp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
 				}
 			} else {
-				echo "<span class='no-skins'>You don't have any skins for '$theme' theme...</span>";
+				echo "<span class='no-skins'>You don't have any skins yet...</span>";
 			}
 			?>
 		</div>
