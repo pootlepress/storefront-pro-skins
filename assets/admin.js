@@ -72,7 +72,7 @@ jQuery(function($) {
     wpSkins.$wrap.html('');
     data = {
       'action': 'wp_skins_save',
-      'skins': wpSkins.data,
+      'skins': JSON.stringify(wpSkins.data),
       'theme': wpSkins.theme
     };
     $.post(ajaxurl, data, function(r) {
