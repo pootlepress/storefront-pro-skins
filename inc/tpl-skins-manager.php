@@ -7,24 +7,34 @@ $inactive_skins = $active_skins = '';
 if ( $skins && ! empty( $skins ) ) {
 	foreach ( $skins as $name => $val ) {
 		if ( $name[0] != '_' ) {
-			$active_skins .= "<a class='wp-skin-button button'>$name</a>";
+			$active_skins .= "<a class='wp-skin-button wp-skin-active button' data-name='$name'>$name</a>";
 		} else {
-			$inactive_skins .= "<a class='wp-skin-button button'>$name</a>";
+			$name = substr( $name, 1 );
+			$inactive_skins .= "<a class='wp-skin-button wp-skin-inactive button' data-name='$name'>$name</a>";
 		}
 	}
 }
 ?>
 
 <div class="export-skins">
-	Drop skins here to export
+	<a href="#" id="export-skin" download="skin.json" data-href="<?php echo "$ajax_url?action=wp_skins_export&skin=" ?>"></a>
+	<div data-skins-action="export" class="skins">
+		Drop skins here to export
+	</div>
 </div>
 
 <div class="active-skins">
 	<h3>Active Skins</h3>
-	<?php echo $active_skins ? $active_skins : ''; ?>
+	<div data-skins-action="active" class="skins">
+		<?php echo $active_skins ? $active_skins : ''; ?>
+	</div>
 </div>
 
 <div class="inactive-skins">
 	<h3>Inactive Skins</h3>
-	<?php echo $inactive_skins ? $inactive_skins : ''; ?>
+	<div data-skins-action="inactive" class="skins">
+		<?php echo $inactive_skins ? $inactive_skins : ''; ?>
+	</div>
 </div>
+
+<a href='#' id="wp-skins-save" class="button button-primary clear-fix">Save</a>

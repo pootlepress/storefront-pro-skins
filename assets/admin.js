@@ -5,22 +5,22 @@
  * @package WP_Skins
  * @version 1.0.0
  */
-var wpSkins,
+var sfpSkins,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-wpSkins = 'object' === typeof wpSkins && wpSkins ? wpSkins : {};
+sfpSkins = 'object' === typeof sfpSkins && sfpSkins ? sfpSkins : {};
 
-wpSkins.data = 'object' === typeof wpSkins.data && wpSkins.data ? wpSkins.data : {};
+sfpSkins.data = 'object' === typeof sfpSkins.data && sfpSkins.data ? sfpSkins.data : {};
 
 jQuery(function($) {
-  wpSkins.$orle = $('#wp-skins-overlay');
-  wpSkins.$dlg = $('#wp-skins-dialog');
-  wpSkins.$wrap = $('#wp-skins-wrap');
-  wpSkins.$skinApplyConfirmDialog = $('#wp-skins-apply-confirm');
-  wpSkins.settingsMaps = {};
-  wpSkins.prepMaps = function() {
+  sfpSkins.$orle = $('#wp-skins-overlay');
+  sfpSkins.$dlg = $('#wp-skins-dialog');
+  sfpSkins.$wrap = $('#wp-skins-wrap');
+  sfpSkins.$skinApplyConfirmDialog = $('#wp-skins-apply-confirm');
+  sfpSkins.settingsMaps = {};
+  sfpSkins.prepMaps = function() {
     var count, supportedTypes;
-    wpSkins.settingsMaps = {};
+    sfpSkins.settingsMaps = {};
     count = 0;
     supportedTypes = ['theme_mod'];
     $.each(wp.customize.settings.controls, function(k, control) {
@@ -32,7 +32,7 @@ jQuery(function($) {
           if (0 > settingId.indexOf('wp_skins')) {
             if (ref = setting.type, indexOf.call(supportedTypes, ref) >= 0) {
               count++;
-              wpSkins.settingsMaps[settingId] = k;
+              sfpSkins.settingsMaps[settingId] = k;
             }
           }
         }
@@ -41,14 +41,14 @@ jQuery(function($) {
     });
     return console.log(count + ' settings mapped');
   };
-  wpSkins.get = function(id) {
+  sfpSkins.get = function(id) {
     if (wp.customize.control.value(id)) {
       return wp.customize.control.value(id).setting.get();
     } else {
       return 'wp_skins_no_value';
     }
   };
-  wpSkins.set = function(id, val) {
+  sfpSkins.set = function(id, val) {
     if (val === 'false') {
       val = '';
     }
@@ -58,7 +58,7 @@ jQuery(function($) {
       return console.log('Couldn\'t set ' + id);
     }
   };
-  wpSkins.notice = function(message) {
+  sfpSkins.notice = function(message) {
     if (!message) {
       return;
     }
@@ -67,67 +67,67 @@ jQuery(function($) {
       return $('#wp-skins-notice').html('').fadeOut(250);
     }, 1100);
   };
-  wpSkins.refreshSkinControl = function(msg) {
+  sfpSkins.refreshSkinControl = function(msg) {
     var data;
-    wpSkins.$wrap.html('');
+    sfpSkins.$wrap.html('');
     data = {
       'action': 'wp_skins_save',
-      'skins': JSON.stringify(wpSkins.data),
-      'theme': wpSkins.theme
+      'skins': JSON.stringify(sfpSkins.data),
+      'theme': sfpSkins.theme
     };
     $.post(ajaxurl, data, function(r) {
       console.log('WPSkins AJAX Success:', r);
       if (msg) {
-        return wpSkins.notice(msg);
+        return sfpSkins.notice(msg);
       }
     }).fail(function(r) {
       console.log('WPSkins AJAX Failed:', r);
-      return wpSkins.notice('Error: Could not connect to server');
+      return sfpSkins.notice('Error: Could not connect to server');
     });
-    $.each(wpSkins.data, function(name, v) {
-      return wpSkins.$wrap.append($('<h3></h3>').addClass('wp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
+    $.each(sfpSkins.data, function(name, v) {
+      return sfpSkins.$wrap.append($('<h3></h3>').addClass('wp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
     });
-    return wpSkins.$wrap.append('<span class="no-skins">You don\'t have any skins for ' + wpSkins.theme + ' theme...</span>');
+    return sfpSkins.$wrap.append('<span class="no-skins">You don\'t have any skins for ' + sfpSkins.theme + ' theme...</span>');
   };
-  wpSkins.addSkin = function(name, values) {
-    if (wpSkins.data && wpSkins.data[name]) {
+  sfpSkins.addSkin = function(name, values) {
+    if (sfpSkins.data && sfpSkins.data[name]) {
       if (confirm('Skin with name "' + name + '" already exists, Do you wanna over write it?')) {
-        wpSkins.data[name] = values;
+        sfpSkins.data[name] = values;
       }
     } else {
-      wpSkins.data[name] = values;
+      sfpSkins.data[name] = values;
     }
-    return wpSkins.refreshSkinControl('Skin saved');
+    return sfpSkins.refreshSkinControl('Skin saved');
   };
-  wpSkins.showSaveDlg = function() {
-    wpSkins.$;
-    wpSkins.$orle.show();
-    return wpSkins.$dlg.show();
+  sfpSkins.showSaveDlg = function() {
+    sfpSkins.$;
+    sfpSkins.$orle.show();
+    return sfpSkins.$dlg.show();
   };
-  wpSkins.closeSaveDlg = function() {
-    wpSkins.$orle.hide();
-    return wpSkins.$dlg.hide();
+  sfpSkins.closeSaveDlg = function() {
+    sfpSkins.$orle.hide();
+    return sfpSkins.$dlg.hide();
   };
-  wpSkins.saveSkinButton = function() {
+  sfpSkins.saveSkinButton = function() {
     var count, skinName, values;
     skinName = $('#wp-skins-skin-name').val();
     $('#wp-skins-skin-name').val('');
-    if ('string' === typeof wpSkins.renameSkin) {
-      if (wpSkins.renameSkin !== skinName) {
-        wpSkins.data[skinName] = wpSkins.data[wpSkins.renameSkin];
-        delete wpSkins.data[wpSkins.renameSkin];
-        delete wpSkins.renameSkin;
-        wpSkins.refreshSkinControl('Skin renamed');
+    if ('string' === typeof sfpSkins.renameSkin) {
+      if (sfpSkins.renameSkin !== skinName) {
+        sfpSkins.data[skinName] = sfpSkins.data[sfpSkins.renameSkin];
+        delete sfpSkins.data[sfpSkins.renameSkin];
+        delete sfpSkins.renameSkin;
+        sfpSkins.refreshSkinControl('Skin renamed');
       }
       $('#wp-skins-save-skin').text('Save skin');
-      return wpSkins.notice('Skin Renamed');
+      return sfpSkins.notice('Skin Renamed');
     } else {
       count = 0;
       values = {};
-      $.each(wpSkins.settingsMaps, function(setID, conID) {
+      $.each(sfpSkins.settingsMaps, function(setID, conID) {
         var val;
         count++;
-        val = wpSkins.get(conID);
+        val = sfpSkins.get(conID);
         if (val !== 'wp_skins_no_value') {
           if (val === 'false') {
             val = '';
@@ -139,65 +139,65 @@ jQuery(function($) {
         return void 0;
       });
       console.log(count + ' settings saved');
-      wpSkins.addSkin(skinName, values);
-      return wpSkins.closeSaveDlg();
+      sfpSkins.addSkin(skinName, values);
+      return sfpSkins.closeSaveDlg();
     }
   };
-  wpSkins.clickedSkin = function(e) {
+  sfpSkins.clickedSkin = function(e) {
     var $t, settings, skin;
     $t = $(e.target);
     skin = $t.closest('.wp-skin-button').text();
     if ($t.is('.wp-skin-button .delete')) {
       if (confirm('Are you sure you want to delete "' + skin + '" skin?')) {
-        delete wpSkins.data[skin];
-        return wpSkins.refreshSkinControl('Skin deleted');
+        delete sfpSkins.data[skin];
+        return sfpSkins.refreshSkinControl('Skin deleted');
       }
     } else if ($t.is('.wp-skin-button')) {
-      settings = wpSkins.data[skin];
+      settings = sfpSkins.data[skin];
       if (settings) {
-        return wpSkins.$skinApplyConfirmDialog.data('skin', skin).data('settings', settings).show().find('.skin-name').html(skin);
+        return sfpSkins.$skinApplyConfirmDialog.data('skin', skin).data('settings', settings).show().find('.skin-name').html(skin);
       }
     }
   };
-  wpSkins.doubleClickedSkin = function(e) {
+  sfpSkins.doubleClickedSkin = function(e) {
     var $t;
     $t = $(e.target);
-    wpSkins.renameSkin = $t.closest('.wp-skin-button').text();
-    $('#wp-skins-skin-name').val(wpSkins.renameSkin);
+    sfpSkins.renameSkin = $t.closest('.wp-skin-button').text();
+    $('#wp-skins-skin-name').val(sfpSkins.renameSkin);
     $('#wp-skins-save-skin').text('Rename');
-    return wpSkins.showSaveDlg();
+    return sfpSkins.showSaveDlg();
   };
-  wpSkins.prepMaps();
+  sfpSkins.prepMaps();
   $('#customize-header-actions').after($('#wp-skins-actions'));
-  $('#wp-skins-save-dialog').click(wpSkins.showSaveDlg);
-  $('#wp-skins-save-skin').click(wpSkins.saveSkinButton);
-  wpSkins.$skinApplyConfirmDialog.find('.button-primary').click(function() {
-    $.each(wpSkins.$skinApplyConfirmDialog.data('settings'), function(setID, value) {
+  $('#wp-skins-save-dialog').click(sfpSkins.showSaveDlg);
+  $('#wp-skins-save-skin').click(sfpSkins.saveSkinButton);
+  sfpSkins.$skinApplyConfirmDialog.find('.button-primary').click(function() {
+    $.each(sfpSkins.$skinApplyConfirmDialog.data('settings'), function(setID, value) {
       var settingId;
-      settingId = 'string' === typeof wpSkins.settingsMaps[setID] ? wpSkins.settingsMaps[setID] : wpSkins.settingsMaps[setID + ']'];
+      settingId = 'string' === typeof sfpSkins.settingsMaps[setID] ? sfpSkins.settingsMaps[setID] : sfpSkins.settingsMaps[setID + ']'];
       if (settingId) {
-        wpSkins.set(settingId, value);
+        sfpSkins.set(settingId, value);
       } else {
         console.log('Couldn\'t find setting for ' + setID);
       }
       return void 0;
     });
-    wpSkins.$skinApplyConfirmDialog.hide();
-    return wpSkins.notice('Skin applied.');
+    sfpSkins.$skinApplyConfirmDialog.hide();
+    return sfpSkins.notice('Skin applied.');
   });
-  wpSkins.$orle.click(wpSkins.closeSaveDlg);
-  return wpSkins.$wrap.click(function(e) {
-    if (wpSkins.timesClickedSkin === 1) {
-      wpSkins.doubleClickedSkin(e);
-      wpSkins.timesClickedSkin = 2;
+  sfpSkins.$orle.click(sfpSkins.closeSaveDlg);
+  return sfpSkins.$wrap.click(function(e) {
+    if (sfpSkins.timesClickedSkin === 1) {
+      sfpSkins.doubleClickedSkin(e);
+      sfpSkins.timesClickedSkin = 2;
     } else {
-      wpSkins.timesClickedSkin = 1;
+      sfpSkins.timesClickedSkin = 1;
     }
     return setTimeout(function() {
-      if (wpSkins.timesClickedSkin === 1) {
-        wpSkins.clickedSkin(e);
+      if (sfpSkins.timesClickedSkin === 1) {
+        sfpSkins.clickedSkin(e);
       }
-      return wpSkins.timesClickedSkin = false;
+      return sfpSkins.timesClickedSkin = false;
     }, 250);
   });
 });

@@ -102,7 +102,7 @@ class WP_Skins_Admin {
 
 		$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
 
-		wp_localize_script( $token . '-js', 'wpSkins', array(
+		wp_localize_script( $token . '-js', 'sfpSkins', array(
 			'data'	=> ! $skins ? new stdClass() : $skins,
 			'theme'	=> 'storefront',
 		) );
@@ -162,8 +162,8 @@ class WP_Skins_Admin {
 			die( "Skins data required." );
 		}
 
-		if ( is_array( $skins ) ) {
-			$skins = json_encode( $skins );
+		if ( is_array( $_POST['skins'] ) ) {
+			$skins = json_encode( $_POST['skins'] );
 		} else {
 			$skins = stripslashes( $_POST['skins'] );
 		}
@@ -177,25 +177,48 @@ class WP_Skins_Admin {
 
 	/** AJAX action to export skins data */
 	public function ajax_wp_skins_export() {
-		die( get_option( 'wp_skins_data', '{}' ) );
+		$json = get_option( 'wp_skins_data', '{}' );
+		$skins = json_decode( $json, 'assoc_array' );
+		if ( ! empty( $_REQUEST['skin'] ) ) {
+			$skin_name = $_REQUEST['skin'];
+			$skin = empty( $skins[ $skin_name ] ) ? array() : $skins[ $skin_name ];
+			die(
+				json_encode(
+					array(
+						$skin_name => $skin
+					)
+				)
+			);
+		}
+		die( $json );
 	}
 
 	/** AJAX action to import skins data */
 	public function ajax_wp_skins_import() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			die( 'failed: You don\'t have permission to manage options.' );
-		}
-
-		$_POST['json'] = stripslashes( $_POST['json'] );
-		if ( empty( $_POST['json'] ) || ! json_decode( $_POST['json'], 'assoc_array' ) ) {
-			die( 'failed: File contains no data.' . $_POST['json'] );
-		}
+		$json = get_option( 'wp_skins_data', '{}' );
+		$skins = json_decode( $json, 'assoc_array' );
 
 		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpskins_import_settings' ) ) {
 			die( 'failed: Nonce validation failed.' );
 		}
 
-		update_option( 'wp_skins_data', $_POST['json'] );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			die( 'failed: You don\'t have permission to manage options.' );
+		}
+
+		if ( empty( $_POST['json'] ) ) {
+			die( 'failed: File contains no data.' );
+		}
+
+		$new_skins = json_decode( stripslashes( $_POST['json'] ), 'assoc_array' );
+
+		if ( ! $new_skins ) {
+			die( "failed: Skin data malformed.\n\n" . $_POST['json'] );
+		}
+
+		$skins = wp_parse_args( $new_skins, $skins );
+
+		update_option( 'wp_skins_data', json_encode( $skins ) );
 
 		die( 'success: Skins successfully imported from the file.' );
 	}
@@ -209,8 +232,15 @@ class WP_Skins_Admin {
 
 		$token = $this->token;
 		$url = $this->url;
-
 		wp_enqueue_style( $token . '-css', $url . '/assets/skins-manager.css' );
-		wp_enqueue_script( $token . '-js', $url . '/assets/skins-manager.js', array( 'jquery' ) );
+		wp_enqueue_script( $token . '-js-skin-man', $url . '/assets/skins-manager.js', array( 'jquery', 'jquery-ui-sortable' ) );
+
+		$skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
+
+		wp_localize_script( $token . '-js-skin-man', 'sfpSkins', array(
+			'data'	=> ! $skins ? new stdClass() : $skins,
+			'theme'	=> 'storefront',
+			'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
+		) );
 	}
 }
