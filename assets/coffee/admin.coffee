@@ -84,15 +84,16 @@ jQuery ($) ->
 
 		$.each( sfpSkins.data, ( name, v ) ->
 
-			sfpSkins.$wrap.append(
-				$ '<h3></h3>'
-				.addClass 'wp-skin-button'
-				.html name
-				.append(
-					$ '<span></span>'
-					.addClass 'delete dashicons dashicons-no'
+			if ( 'undefined' is typeof v['sfpSkinHidden'] || ! v['sfpSkinHidden'] )
+				sfpSkins.$wrap.append(
+					$ '<h3></h3>'
+					.addClass 'wp-skin-button'
+					.html name
+					.append(
+						$ '<span></span>'
+						.addClass 'delete dashicons dashicons-no'
+					)
 				)
-			)
 		)
 		sfpSkins.$wrap.append '<span class="no-skins">You don\'t have any skins for ' + sfpSkins.theme + ' theme...</span>'
 

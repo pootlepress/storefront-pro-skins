@@ -199,6 +199,7 @@ class WP_Skins_Admin {
 		$skins = json_decode( $json, 'assoc_array' );
 
 		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpskins_import_settings' ) ) {
+			var_dump( $_POST );
 			die( 'failed: Nonce validation failed.' );
 		}
 
@@ -241,6 +242,7 @@ class WP_Skins_Admin {
 			'data'	=> ! $skins ? new stdClass() : $skins,
 			'theme'	=> 'storefront',
 			'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
+			'importNonce' => wp_create_nonce( 'wpskins_import_settings' ),
 		) );
 	}
 }

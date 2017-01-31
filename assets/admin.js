@@ -85,7 +85,9 @@ jQuery(function($) {
       return sfpSkins.notice('Error: Could not connect to server');
     });
     $.each(sfpSkins.data, function(name, v) {
-      return sfpSkins.$wrap.append($('<h3></h3>').addClass('wp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
+      if ('undefined' === typeof v['sfpSkinHidden'] || !v['sfpSkinHidden']) {
+        return sfpSkins.$wrap.append($('<h3></h3>').addClass('wp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
+      }
     });
     return sfpSkins.$wrap.append('<span class="no-skins">You don\'t have any skins for ' + sfpSkins.theme + ' theme...</span>');
   };

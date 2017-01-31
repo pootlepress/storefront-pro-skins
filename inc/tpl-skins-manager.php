@@ -5,11 +5,11 @@ $skins = json_decode( get_option( 'wp_skins_data', '{}' ), 'array' );
 $inactive_skins = $active_skins = '';
 
 if ( $skins && ! empty( $skins ) ) {
-	foreach ( $skins as $name => $val ) {
-		if ( $name[0] != '_' ) {
+	foreach ( $skins as $name => $data ) {
+		var_dump( empty( $data['sfpSkinHidden'] ) );
+		if ( empty( $data['sfpSkinHidden'] ) ) {
 			$active_skins .= "<a class='wp-skin-button wp-skin-active button' data-name='$name'>$name</a>";
 		} else {
-			$name = substr( $name, 1 );
 			$inactive_skins .= "<a class='wp-skin-button wp-skin-inactive button' data-name='$name'>$name</a>";
 		}
 	}
