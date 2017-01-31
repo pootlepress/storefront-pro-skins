@@ -6,7 +6,6 @@ $inactive_skins = $active_skins = '';
 
 if ( $skins && ! empty( $skins ) ) {
 	foreach ( $skins as $name => $data ) {
-		var_dump( empty( $data['sfpSkinHidden'] ) );
 		if ( empty( $data['sfpSkinHidden'] ) ) {
 			$active_skins .= "<a class='wp-skin-button wp-skin-active button' data-name='$name'>$name</a>";
 		} else {
