@@ -1,1 +1,1 @@
-# WP Skins
+# Storefront Pro Skins

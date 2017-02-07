@@ -22,7 +22,7 @@ jQuery ( $ ) ->
 
 		reqArgs =
 			type   : 'POST'
-			url    : ajaxurl + '?action=wp_skins_import'
+			url    : ajaxurl + '?action=sfp_skins_import'
 			data   : postData
 			success: callback
 		$.ajax reqArgs
@@ -89,7 +89,7 @@ jQuery ( $ ) ->
 		$ '#wpskins-import-start'
 		.fadeIn()
 
-	$ '#wp-skins-save'
+	$ '#sfp-skins-save'
 	.click ->
 		importSkins(
 			sfpSkins.data,

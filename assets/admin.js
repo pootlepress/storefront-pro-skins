@@ -2,7 +2,7 @@
 /*
  * Plugin admin end scripts
  *
- * @package WP_Skins
+ * @package Storefront_Pro_Skins
  * @version 1.0.0
  */
 var sfpSkins,
@@ -13,10 +13,10 @@ sfpSkins = 'object' === typeof sfpSkins && sfpSkins ? sfpSkins : {};
 sfpSkins.data = 'object' === typeof sfpSkins.data && sfpSkins.data ? sfpSkins.data : {};
 
 jQuery(function($) {
-  sfpSkins.$orle = $('#wp-skins-overlay');
-  sfpSkins.$dlg = $('#wp-skins-dialog');
-  sfpSkins.$wrap = $('#wp-skins-wrap');
-  sfpSkins.$skinApplyConfirmDialog = $('#wp-skins-apply-confirm');
+  sfpSkins.$orle = $('#sfp-skins-overlay');
+  sfpSkins.$dlg = $('#sfp-skins-dialog');
+  sfpSkins.$wrap = $('#sfp-skins-wrap');
+  sfpSkins.$skinApplyConfirmDialog = $('#sfp-skins-apply-confirm');
   sfpSkins.settingsMaps = {};
   sfpSkins.prepMaps = function() {
     var count, supportedTypes;
@@ -29,7 +29,7 @@ jQuery(function($) {
         settingId = control.settings["default"];
         if (wp.customize.settings.settings[settingId]) {
           setting = wp.customize.settings.settings[settingId];
-          if (0 > settingId.indexOf('wp_skins')) {
+          if (0 > settingId.indexOf('sfp_skins')) {
             if (ref = setting.type, indexOf.call(supportedTypes, ref) >= 0) {
               count++;
               sfpSkins.settingsMaps[settingId] = k;
@@ -45,7 +45,7 @@ jQuery(function($) {
     if (wp.customize.control.value(id)) {
       return wp.customize.control.value(id).setting.get();
     } else {
-      return 'wp_skins_no_value';
+      return 'sfp_skins_no_value';
     }
   };
   sfpSkins.set = function(id, val) {
@@ -62,16 +62,16 @@ jQuery(function($) {
     if (!message) {
       return;
     }
-    $('#wp-skins-notice').html('<div id="wp-skins-notice-message">' + message + '</div>').fadeIn(250);
+    $('#sfp-skins-notice').html('<div id="sfp-skins-notice-message">' + message + '</div>').fadeIn(250);
     return setTimeout(function() {
-      return $('#wp-skins-notice').html('').fadeOut(250);
+      return $('#sfp-skins-notice').html('').fadeOut(250);
     }, 1100);
   };
   sfpSkins.refreshSkinControl = function(msg) {
     var data;
     sfpSkins.$wrap.html('');
     data = {
-      'action': 'wp_skins_save',
+      'action': 'sfp_skins_save',
       'skins': JSON.stringify(sfpSkins.data),
       'theme': sfpSkins.theme
     };
@@ -86,7 +86,7 @@ jQuery(function($) {
     });
     $.each(sfpSkins.data, function(name, v) {
       if ('undefined' === typeof v['sfpSkinHidden'] || !v['sfpSkinHidden']) {
-        return sfpSkins.$wrap.append($('<h3></h3>').addClass('wp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
+        return sfpSkins.$wrap.append($('<h3></h3>').addClass('sfp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
       }
     });
     return sfpSkins.$wrap.append('<span class="no-skins">You don\'t have any skins for ' + sfpSkins.theme + ' theme...</span>');
@@ -112,8 +112,8 @@ jQuery(function($) {
   };
   sfpSkins.saveSkinButton = function() {
     var count, skinName, values;
-    skinName = $('#wp-skins-skin-name').val();
-    $('#wp-skins-skin-name').val('');
+    skinName = $('#sfp-skins-skin-name').val();
+    $('#sfp-skins-skin-name').val('');
     if ('string' === typeof sfpSkins.renameSkin) {
       if (sfpSkins.renameSkin !== skinName) {
         sfpSkins.data[skinName] = sfpSkins.data[sfpSkins.renameSkin];
@@ -121,7 +121,7 @@ jQuery(function($) {
         delete sfpSkins.renameSkin;
         sfpSkins.refreshSkinControl('Skin renamed');
       }
-      $('#wp-skins-save-skin').text('Save skin');
+      $('#sfp-skins-save-skin').text('Save skin');
       return sfpSkins.notice('Skin Renamed');
     } else {
       count = 0;
@@ -130,7 +130,7 @@ jQuery(function($) {
         var val;
         count++;
         val = sfpSkins.get(conID);
-        if (val !== 'wp_skins_no_value') {
+        if (val !== 'sfp_skins_no_value') {
           if (val === 'false') {
             val = '';
           }
@@ -148,13 +148,13 @@ jQuery(function($) {
   sfpSkins.clickedSkin = function(e) {
     var $t, settings, skin;
     $t = $(e.target);
-    skin = $t.closest('.wp-skin-button').text();
-    if ($t.is('.wp-skin-button .delete')) {
+    skin = $t.closest('.sfp-skin-button').text();
+    if ($t.is('.sfp-skin-button .delete')) {
       if (confirm('Are you sure you want to delete "' + skin + '" skin?')) {
         delete sfpSkins.data[skin];
         return sfpSkins.refreshSkinControl('Skin deleted');
       }
-    } else if ($t.is('.wp-skin-button')) {
+    } else if ($t.is('.sfp-skin-button')) {
       settings = sfpSkins.data[skin];
       if (settings) {
         return sfpSkins.$skinApplyConfirmDialog.data('skin', skin).data('settings', settings).show().find('.skin-name').html(skin);
@@ -164,15 +164,15 @@ jQuery(function($) {
   sfpSkins.doubleClickedSkin = function(e) {
     var $t;
     $t = $(e.target);
-    sfpSkins.renameSkin = $t.closest('.wp-skin-button').text();
-    $('#wp-skins-skin-name').val(sfpSkins.renameSkin);
-    $('#wp-skins-save-skin').text('Rename');
+    sfpSkins.renameSkin = $t.closest('.sfp-skin-button').text();
+    $('#sfp-skins-skin-name').val(sfpSkins.renameSkin);
+    $('#sfp-skins-save-skin').text('Rename');
     return sfpSkins.showSaveDlg();
   };
   sfpSkins.prepMaps();
-  $('#customize-header-actions').after($('#wp-skins-actions'));
-  $('#wp-skins-save-dialog').click(sfpSkins.showSaveDlg);
-  $('#wp-skins-save-skin').click(sfpSkins.saveSkinButton);
+  $('#customize-header-actions').after($('#sfp-skins-actions'));
+  $('#sfp-skins-save-dialog').click(sfpSkins.showSaveDlg);
+  $('#sfp-skins-save-skin').click(sfpSkins.saveSkinButton);
   sfpSkins.$skinApplyConfirmDialog.find('.button-primary').click(function() {
     $.each(sfpSkins.$skinApplyConfirmDialog.data('settings'), function(setID, value) {
       var settingId;

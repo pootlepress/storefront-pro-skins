@@ -23,7 +23,7 @@ jQuery(function($) {
     postData.nonce = sfpSkins.importNonce;
     reqArgs = {
       type: 'POST',
-      url: ajaxurl + '?action=wp_skins_import',
+      url: ajaxurl + '?action=sfp_skins_import',
       data: postData,
       success: callback
     };
@@ -95,7 +95,7 @@ jQuery(function($) {
   $('#wpskins-import-file').change(function() {
     return $('#wpskins-import-start').fadeIn();
   });
-  return $('#wp-skins-save').click(function() {
+  return $('#sfp-skins-save').click(function() {
     return importSkins(sfpSkins.data, function(res) {
       if (res.search('success') > -1) {
         return alert('Saved skins');

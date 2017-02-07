@@ -1,6 +1,6 @@
 <?php
 
-class WP_Skins_Customize_Control extends WP_Customize_Control {
+class Storefront_Pro_Skins_Customize_Control extends WP_Customize_Control {
 
 	function __construct( WP_Customize_Manager $manager, $id, array $args ) {
 		parent::__construct( $manager, $id, $args );
@@ -13,12 +13,12 @@ class WP_Skins_Customize_Control extends WP_Customize_Control {
 			Skins for Storefront Pro
 		</span>
 		<hr>
-		<div id="wp-skins-wrap">
+		<div id="sfp-skins-wrap">
 			<?php
 			if ( $skins ) {
 				foreach ( $skins as $name => $data ) {
 					if ( empty( $data['sfpSkinHidden'] ) ) {
-						echo "<h3 class='wp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
+						echo "<h3 class='sfp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
 					}
 				}
 			} else {

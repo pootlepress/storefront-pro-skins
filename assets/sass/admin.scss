@@ -1,16 +1,16 @@
 /**
  * Plugin admin end styles
  *
- * @package WP_Skins
+ * @package Storefront_Pro_Skins
  * @version 1.0.0
  */
-#customize-header-actions #wp-skins-save-dialog {
+#customize-header-actions #sfp-skins-save-dialog {
 	position: absolute;
 	top: 0;
 	left: 52px;
 }
 
-#wp-skins-apply-confirm,#wp-skins-overlay, #wp-skins-notice, #wp-skins-dialog {
+#sfp-skins-apply-confirm,#sfp-skins-overlay, #sfp-skins-notice, #sfp-skins-dialog {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -20,7 +20,7 @@
 	background: rgba(0,0,0,0.5);
 	z-index: 97;
 }
-#wp-skins-apply-confirm {
+#sfp-skins-apply-confirm {
 	height: 70px;
 	width: 520px;
 	padding: 1em;
@@ -32,14 +32,14 @@
 	}
 }
 
-#wp-skins-notice {
+#sfp-skins-notice {
 	height: 52px;
 	width: 520px;
 	text-align: center;
 	background: none;
 }
 
-#wp-skins-notice-message {
+#sfp-skins-notice-message {
 	padding: 1em 1.6em;
 	display: inline-block;
 	font: 200 25px lato, sans-serif;
@@ -48,7 +48,7 @@
 	border-radius: 99px;
 }
 
-#wp-skins-dialog {
+#sfp-skins-dialog {
 	background: none;
 	height: 39px;
 	width: 90vw;
@@ -94,7 +94,7 @@
 	color: #777;
 }
 
-h3.wp-skin-button {
+h3.sfp-skin-button {
 	padding: 1em;
 	background: #fff;
 	border: 1px solid #ccc;
@@ -121,7 +121,7 @@ h3.wp-skin-button {
 	top: 90px;
 }
 
-#wp-skins-actions {
+#sfp-skins-actions {
 	position: absolute;
 	top: 45px;
 	left: 0;
@@ -138,11 +138,11 @@ h3.wp-skin-button {
 		}
 	}
 
-	#wp-skins-view {
+	#sfp-skins-view {
 		float: left;
 	}
 }
 
-#accordion-section-wp_skins_section > .accordion-section-title {
+#accordion-section-sfp_skins_section > .accordion-section-title {
 	display: none;
 }

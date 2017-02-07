@@ -1,36 +1,36 @@
-/** Plugin admin end styles  @package WP_Skins @version 1.0.0 */
-#customize-header-actions #wp-skins-save-dialog { position: absolute; top: 0; left: 52px; }
+/** Plugin admin end styles  @package Storefront_Pro_Skins @version 1.0.0 */
+#customize-header-actions #sfp-skins-save-dialog { position: absolute; top: 0; left: 52px; }
 
-#wp-skins-apply-confirm, #wp-skins-overlay, #wp-skins-notice, #wp-skins-dialog { position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: auto; background: rgba(0, 0, 0, 0.5); z-index: 97; }
+#sfp-skins-apply-confirm, #sfp-skins-overlay, #sfp-skins-notice, #sfp-skins-dialog { position: fixed; top: 0; left: 0; right: 0; bottom: 0; margin: auto; background: rgba(0, 0, 0, 0.5); z-index: 97; }
 
-#wp-skins-apply-confirm { height: 70px; width: 520px; padding: 1em; background: #fff; border: 1px outset #aaa; }
-#wp-skins-apply-confirm button, #wp-skins-apply-confirm p { margin: 1em; float: right; }
+#sfp-skins-apply-confirm { height: 70px; width: 520px; padding: 1em; background: #fff; border: 1px outset #aaa; }
+#sfp-skins-apply-confirm button, #sfp-skins-apply-confirm p { margin: 1em; float: right; }
 
-#wp-skins-notice { height: 52px; width: 520px; text-align: center; background: none; }
+#sfp-skins-notice { height: 52px; width: 520px; text-align: center; background: none; }
 
-#wp-skins-notice-message { padding: 1em 1.6em; display: inline-block; font: 200 25px lato, sans-serif; background: #0085ba; color: #fff; border-radius: 99px; }
+#sfp-skins-notice-message { padding: 1em 1.6em; display: inline-block; font: 200 25px lato, sans-serif; background: #0085ba; color: #fff; border-radius: 99px; }
 
-#wp-skins-dialog { background: none; height: 39px; width: 90vw; max-width: 520px; }
-#wp-skins-dialog > input, #wp-skins-dialog > button { text-align: center; line-height: 35px; padding: 0; margin: 0; box-sizing: border-box; height: auto; box-shadow: none; float: left; width: 21%; border-radius: 0 5px 5px 0; }
-#wp-skins-dialog input { padding: 0 0.5em; text-align: left; width: 79%; border-radius: 5px 0 0 5px; }
-#wp-skins-dialog .notice.already-exists { width: 100%; position: absolute; bottom: 124%; padding: 1em; box-sizing: border-box; left: 0; margin: 0; border-radius: 5px; }
-#wp-skins-dialog .notice.already-exists * { margin: 0; }
-#wp-skins-dialog .notice.already-exists button { float: right; }
+#sfp-skins-dialog { background: none; height: 39px; width: 90vw; max-width: 520px; }
+#sfp-skins-dialog > input, #sfp-skins-dialog > button { text-align: center; line-height: 35px; padding: 0; margin: 0; box-sizing: border-box; height: auto; box-shadow: none; float: left; width: 21%; border-radius: 0 5px 5px 0; }
+#sfp-skins-dialog input { padding: 0 0.5em; text-align: left; width: 79%; border-radius: 5px 0 0 5px; }
+#sfp-skins-dialog .notice.already-exists { width: 100%; position: absolute; bottom: 124%; padding: 1em; box-sizing: border-box; left: 0; margin: 0; border-radius: 5px; }
+#sfp-skins-dialog .notice.already-exists * { margin: 0; }
+#sfp-skins-dialog .notice.already-exists button { float: right; }
 
 .no-skins { font-size: 1.1em; color: #777; }
 
-h3.wp-skin-button { padding: 1em; background: #fff; border: 1px solid #ccc; cursor: pointer; opacity: 0.88; position: relative; }
-h3.wp-skin-button:hover { opacity: 1; }
-h3.wp-skin-button .delete { position: absolute; top: 50%; margin-top: -10px; right: 0.5em; }
-h3.wp-skin-button ~ .no-skins { display: none; }
+h3.sfp-skin-button { padding: 1em; background: #fff; border: 1px solid #ccc; cursor: pointer; opacity: 0.88; position: relative; }
+h3.sfp-skin-button:hover { opacity: 1; }
+h3.sfp-skin-button .delete { position: absolute; top: 50%; margin-top: -10px; right: 0.5em; }
+h3.sfp-skin-button ~ .no-skins { display: none; }
 
 .wp-full-overlay-sidebar .wp-full-overlay-sidebar-content { top: 90px; }
 
-#wp-skins-actions { position: absolute; top: 45px; left: 0; right: 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
-#wp-skins-actions .button { float: right; margin: 7px 0; padding: 0 10px 0 7px; }
-#wp-skins-actions .button .dashicons { vertical-align: middle; margin-bottom: 2px; }
-#wp-skins-actions #wp-skins-view { float: left; }
+#sfp-skins-actions { position: absolute; top: 45px; left: 0; right: 0; border-top: 1px solid #ccc; border-bottom: 1px solid #ccc; }
+#sfp-skins-actions .button { float: right; margin: 7px 0; padding: 0 10px 0 7px; }
+#sfp-skins-actions .button .dashicons { vertical-align: middle; margin-bottom: 2px; }
+#sfp-skins-actions #sfp-skins-view { float: left; }
 
-#accordion-section-wp_skins_section > .accordion-section-title { display: none; }
+#accordion-section-sfp_skins_section > .accordion-section-title { display: none; }
 
 /*# sourceMappingURL=admin.css.map */

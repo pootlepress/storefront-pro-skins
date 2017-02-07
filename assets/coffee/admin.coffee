@@ -1,7 +1,7 @@
 ###
  * Plugin admin end scripts
  *
- * @package WP_Skins
+ * @package Storefront_Pro_Skins
  * @version 1.0.0
 ###
 
@@ -12,16 +12,16 @@ sfpSkins.data = if 'object' == typeof sfpSkins.data && sfpSkins.data then sfpSki
 jQuery ($) ->
 
 	# Element: Overlay
-	sfpSkins.$orle = $ '#wp-skins-overlay'
+	sfpSkins.$orle = $ '#sfp-skins-overlay'
 
 	# Element: Dialog
-	sfpSkins.$dlg = $ '#wp-skins-dialog'
+	sfpSkins.$dlg = $ '#sfp-skins-dialog'
 
 	# Element: Skins control wrapper
-	sfpSkins.$wrap = $ '#wp-skins-wrap'
+	sfpSkins.$wrap = $ '#sfp-skins-wrap'
 
 	# Element: Skins control wrapper
-	sfpSkins.$skinApplyConfirmDialog = $ '#wp-skins-apply-confirm'
+	sfpSkins.$skinApplyConfirmDialog = $ '#sfp-skins-apply-confirm'
 
 	# Property: Settings maps
 	sfpSkins.settingsMaps = {}
@@ -36,7 +36,7 @@ jQuery ($) ->
 				settingId = control.settings.default
 				if ( wp.customize.settings.settings[ settingId ] ) # Setting for setting ID exists
 					setting = wp.customize.settings.settings[ settingId ]
-					if 0 > settingId.indexOf 'wp_skins' # skip wp skins settings
+					if 0 > settingId.indexOf 'sfp_skins' # skip Storefront Pro Skins settings
 						if setting.type in supportedTypes
 							count++
 							sfpSkins.settingsMaps[ settingId ] = k
@@ -46,7 +46,7 @@ jQuery ($) ->
 
 	# Method: Get setting value
 	sfpSkins.get = ( id ) ->
-		return if wp.customize.control.value( id ) then wp.customize.control.value( id ).setting.get() else 'wp_skins_no_value'
+		return if wp.customize.control.value( id ) then wp.customize.control.value( id ).setting.get() else 'sfp_skins_no_value'
 
 	# Method: Set setting value
 	sfpSkins.set = ( id, val ) ->
@@ -56,11 +56,11 @@ jQuery ($) ->
 	# Method: Display notice
 	sfpSkins.notice = ( message ) ->
 		if ! message then return;
-		$ '#wp-skins-notice'
-		.html( '<div id="wp-skins-notice-message">' + message + '</div>' ).fadeIn(250)
+		$ '#sfp-skins-notice'
+		.html( '<div id="sfp-skins-notice-message">' + message + '</div>' ).fadeIn(250)
 		setTimeout(
 			() ->
-				$ '#wp-skins-notice'
+				$ '#sfp-skins-notice'
 				.html('').fadeOut(250)
 		,1100
 		)
@@ -70,7 +70,7 @@ jQuery ($) ->
 		sfpSkins.$wrap.html ''
 
 		data =
-			'action': 'wp_skins_save'
+			'action': 'sfp_skins_save'
 			'skins': JSON.stringify( sfpSkins.data )
 			'theme': sfpSkins.theme
 
@@ -87,7 +87,7 @@ jQuery ($) ->
 			if ( 'undefined' is typeof v['sfpSkinHidden'] || ! v['sfpSkinHidden'] )
 				sfpSkins.$wrap.append(
 					$ '<h3></h3>'
-					.addClass 'wp-skin-button'
+					.addClass 'sfp-skin-button'
 					.html name
 					.append(
 						$ '<span></span>'
@@ -119,8 +119,8 @@ jQuery ($) ->
 
 	# Method: Save skin button
 	sfpSkins.saveSkinButton = () ->
-		skinName = $( '#wp-skins-skin-name' ).val()
-		$( '#wp-skins-skin-name' ).val( '' )
+		skinName = $( '#sfp-skins-skin-name' ).val()
+		$( '#sfp-skins-skin-name' ).val( '' )
 
 		if 'string' is typeof sfpSkins.renameSkin
 			if sfpSkins.renameSkin isnt skinName
@@ -128,7 +128,7 @@ jQuery ($) ->
 				delete sfpSkins.data[ sfpSkins.renameSkin ]
 				delete sfpSkins.renameSkin
 				sfpSkins.refreshSkinControl( 'Skin renamed' );
-			$( '#wp-skins-save-skin' ).text( 'Save skin' )
+			$( '#sfp-skins-save-skin' ).text( 'Save skin' )
 			sfpSkins.notice 'Skin Renamed'
 		else
 			count = 0
@@ -136,7 +136,7 @@ jQuery ($) ->
 			$.each( sfpSkins.settingsMaps, ( setID, conID ) ->
 				count++
 				val = sfpSkins.get( conID ) # Get data with control ID
-				if ( val != 'wp_skins_no_value' )
+				if ( val != 'sfp_skins_no_value' )
 					if val is 'false' then val = ''
 					if typeof val is 'string'
 						values[ setID ] = val # Set data with setting ID
@@ -150,13 +150,13 @@ jQuery ($) ->
 	# Method: Clicked skin
 	sfpSkins.clickedSkin = ( e ) ->
 		$t = $( e.target )
-		skin = $t.closest( '.wp-skin-button' ).text()
+		skin = $t.closest( '.sfp-skin-button' ).text()
 
-		if $t.is( '.wp-skin-button .delete' )
+		if $t.is( '.sfp-skin-button .delete' )
 			if confirm 'Are you sure you want to delete "' + skin + '" skin?'
 				delete sfpSkins.data[ skin ]
 				sfpSkins.refreshSkinControl( 'Skin deleted' );
-		else if $t.is( '.wp-skin-button' )
+		else if $t.is( '.sfp-skin-button' )
 			settings = sfpSkins.data[ skin ]
 			if ( settings )
 				sfpSkins.$skinApplyConfirmDialog
@@ -168,9 +168,9 @@ jQuery ($) ->
 	# Method: Clicked skin
 	sfpSkins.doubleClickedSkin = ( e ) ->
 		$t = $( e.target )
-		sfpSkins.renameSkin = $t.closest( '.wp-skin-button' ).text()
-		$( '#wp-skins-skin-name' ).val( sfpSkins.renameSkin )
-		$( '#wp-skins-save-skin' ).text( 'Rename' )
+		sfpSkins.renameSkin = $t.closest( '.sfp-skin-button' ).text()
+		$( '#sfp-skins-skin-name' ).val( sfpSkins.renameSkin )
+		$( '#sfp-skins-save-skin' ).text( 'Rename' )
 		sfpSkins.showSaveDlg()
 
 	# Prepare maps for settings
@@ -178,13 +178,13 @@ jQuery ($) ->
 
 	# DOM Manipulation
 	$ '#customize-header-actions'
-	.after( $ '#wp-skins-actions' )
+	.after( $ '#sfp-skins-actions' )
 
 	# Handlers: Save skin dialog open button
-	$( '#wp-skins-save-dialog' ).click sfpSkins.showSaveDlg
+	$( '#sfp-skins-save-dialog' ).click sfpSkins.showSaveDlg
 
 	# Handlers: Save skin button
-	$( '#wp-skins-save-skin' ).click sfpSkins.saveSkinButton
+	$( '#sfp-skins-save-skin' ).click sfpSkins.saveSkinButton
 
 	# Handlers: Save skin button
 	sfpSkins.$skinApplyConfirmDialog.find( '.button-primary' ).click ()->

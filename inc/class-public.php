@@ -1,11 +1,11 @@
 <?php
 
 /**
- * WP Skins public class
+ * Storefront Pro Skins public class
  */
-class WP_Skins_Public{
+class Storefront_Pro_Skins_Public{
 
-	/** @var WP_Skins_Public Instance */
+	/** @var Storefront_Pro_Skins_Public Instance */
 	private static $_instance = null;
 
 	/* @var string $token Plugin token */
@@ -21,8 +21,8 @@ class WP_Skins_Public{
 	public $version;
 
 	/**
-	 * WP Skins public class instance
-	 * @return WP_Skins_Public instance
+	 * Storefront Pro Skins public class instance
+	 * @return Storefront_Pro_Skins_Public instance
 	 */
 	public static function instance() {
 		if ( null == self::$_instance ) {
@@ -37,10 +37,10 @@ class WP_Skins_Public{
 	 * @since   1.0.0
 	 */
 	private function __construct() {
-		$this->token   =   WP_Skins::$token;
-		$this->url     =   WP_Skins::$url;
-		$this->path    =   WP_Skins::$path;
-		$this->version =   WP_Skins::$version;
+		$this->token   =   Storefront_Pro_Skins::$token;
+		$this->url     =   Storefront_Pro_Skins::$url;
+		$this->path    =   Storefront_Pro_Skins::$path;
+		$this->version =   Storefront_Pro_Skins::$version;
 	}
 
 	/**

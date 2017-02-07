@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WP Skins
+Plugin Name: Storefront Pro Skins
 Plugin URI: http://pootlepress.com/
 Description: Save instances of theme customization settings as skins and apply them on demand later.
 Author: pootlepress
@@ -15,16 +15,16 @@ require 'inc/class-admin.php';
 require 'inc/class-public.php';
 
 /**
- * WP Skins main class
+ * Storefront Pro Skins main class
  * @static string $token Plugin token
  * @static string $file Plugin __FILE__
  * @static string $url Plugin root dir url
  * @static string $path Plugin root dir path
  * @static string $version Plugin version
  */
-class WP_Skins{
+class Storefront_Pro_Skins{
 
-	/** @var WP_Skins Instance */
+	/** @var Storefront_Pro_Skins Instance */
 	private static $_instance = null;
 
 	/** @var string Token */
@@ -42,15 +42,15 @@ class WP_Skins{
 	/** @var string Plugin directory path */
 	public static $path;
 
-	/** @var WP_Skins_Admin Instance */
+	/** @var Storefront_Pro_Skins_Admin Instance */
 	public $admin;
 
-	/** @var WP_Skins_Public Instance */
+	/** @var Storefront_Pro_Skins_Public Instance */
 	public $public;
 
 	/**
 	 * Return class instance
-	 * @return WP_Skins instance
+	 * @return Storefront_Pro_Skins instance
 	 */
 	public static function instance( $file = __FILE__ ) {
 		if ( null == self::$_instance ) {
@@ -67,7 +67,7 @@ class WP_Skins{
 	 */
 	private function __construct( $file ) {
 
-		self::$token   = 'wp-skins';
+		self::$token   = 'sfp-skins';
 		self::$file    = $file;
 		self::$url     = plugin_dir_url( $file );
 		self::$path    = plugin_dir_path( $file );
@@ -81,8 +81,11 @@ class WP_Skins{
 	 * @action init
 	 */
 	public function setup() {
-		$this->_admin(); //Initiate admin
-		$this->_public(); //Initiate public
+		$theme = wp_get_theme();
+		if ( class_exists( 'Storefront_Pro' ) && ( $theme->name == 'Storefront' || $theme->parent_theme == 'Storefront' ) ) {
+			$this->_admin(); //Initiate admin
+			$this->_public(); //Initiate public
+		}
 	}
 
 	/**
@@ -90,16 +93,16 @@ class WP_Skins{
 	 */
 	private function _admin() {
 		//Instantiating admin class
-		$this->admin = WP_Skins_Admin::instance();
+		$this->admin = Storefront_Pro_Skins_Admin::instance();
 
 		//Enqueue admin end JS and CSS
 		add_action( 'customize_controls_print_footer_scripts',	array( $this->admin, 'enqueue' ) );
 		add_action( 'admin_enqueue_scripts',					array( $this->admin, 'admin_enqueue' ) );
 		add_action( 'customize_register',						array( $this->admin, 'customize_register' ) );
 		add_action( 'admin_menu',								array( $this->admin, 'admin_menu' ) );
-		add_action( 'wp_ajax_wp_skins_save',					array( $this->admin, 'ajax_wp_skins_save' ) );
-		add_action( 'wp_ajax_wp_skins_export',					array( $this->admin, 'ajax_wp_skins_export' ) );
-		add_action( 'wp_ajax_wp_skins_import',					array( $this->admin, 'ajax_wp_skins_import' ) );
+		add_action( 'wp_ajax_sfp_skins_save',					array( $this->admin, 'ajax_sfp_skins_save' ) );
+		add_action( 'wp_ajax_sfp_skins_export',					array( $this->admin, 'ajax_sfp_skins_export' ) );
+		add_action( 'wp_ajax_sfp_skins_import',					array( $this->admin, 'ajax_sfp_skins_import' ) );
 
 	}
 
@@ -108,7 +111,7 @@ class WP_Skins{
 	 */
 	private function _public() {
 		//Instantiating public class
-		$this->public = WP_Skins_Public::instance();
+		$this->public = Storefront_Pro_Skins_Public::instance();
 
 		//Enqueue front end JS and CSS
 		add_action( 'wp_enqueue_scripts',	array( $this->public, 'enqueue' ) );
@@ -117,4 +120,4 @@ class WP_Skins{
 }
 
 /** Intantiating main plugin class */
-WP_Skins::instance( __FILE__ );
+Storefront_Pro_Skins::instance( __FILE__ );
