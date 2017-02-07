@@ -50,7 +50,7 @@ jQuery(function($) {
   };
   $('#wpskins-import-start').click(function() {
     return readFile(function(json, file) {
-      msg('Requesting import from file ' + file.name + '.');
+      msg('Uploading file ' + file.name + '.');
       return importSkins(json, function(res) {
         return msg(res);
       });
@@ -91,6 +91,9 @@ jQuery(function($) {
         return console.log("No handler for action: " + action);
       }
     }
+  });
+  $('#wpskins-import-file').change(function() {
+    return $('#wpskins-import-start').fadeIn();
   });
   return $('#wp-skins-save').click(function() {
     return importSkins(sfpSkins.data, function(res) {

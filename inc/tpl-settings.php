@@ -39,10 +39,10 @@
 	</style>
 	<div id='wp-skins-import'>
 		<div id="wpskins-import-msg"></div>
-		<p>Are you sure you wanna import Skins for this file? All your current Skins will be lost.</p>
+		<p>Please choose a file to import skins from.</p>
 		<p><input type="file" id="wpskins-import-file"></p>
-		<a class='button button-primary' type='button' id='wpskins-import-start'>Yeah, Load file</a>
-		<a class='button right' href='#wp-skins'>No, thanks</a>
+		<a class='button button-primary' type='button' id='wpskins-import-start' style='display:none;'>Import from file</a>
+		<a class='button right' href='#wp-skins'>Cancel</a>
 	</div>
 	<div class='notice notice-warning' id='wp-skins-reset'>
 		<p>Are you sure you wanna reset to default Storefront options?</p>

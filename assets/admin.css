@@ -31,4 +31,6 @@ h3.wp-skin-button ~ .no-skins { display: none; }
 #wp-skins-actions .button .dashicons { vertical-align: middle; margin-bottom: 2px; }
 #wp-skins-actions #wp-skins-view { float: left; }
 
+#accordion-section-wp_skins_section > .accordion-section-title { display: none; }
+
 /*# sourceMappingURL=admin.css.map */

@@ -48,7 +48,7 @@ jQuery ( $ ) ->
 
 	$('#wpskins-import-start').click ->
 		readFile ( json, file ) ->
-			msg 'Requesting import from file ' + file.name + '.'
+			msg 'Uploading file ' + file.name + '.'
 			importSkins(
 				json,
 				( res ) ->
@@ -83,6 +83,11 @@ jQuery ( $ ) ->
 				skinsSortingHandlers[ action ]( $t, ui.sender, ui )
 			else
 				console.log "No handler for action: " + action
+
+	$ '#wpskins-import-file'
+	.change ->
+		$ '#wpskins-import-start'
+		.fadeIn()
 
 	$ '#wp-skins-save'
 	.click ->
