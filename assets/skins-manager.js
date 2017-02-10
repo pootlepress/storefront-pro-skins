@@ -1,6 +1,6 @@
 jQuery(function($) {
   var $msg, $xpA, importSkins, msg, readFile, skinsSortingHandlers;
-  $msg = $('#wpskins-import-msg');
+  $msg = $('#sfpskins-import-msg');
   $xpA = $('#export-skin');
   msg = function(msg) {
     var response;
@@ -35,7 +35,7 @@ jQuery(function($) {
       alert('The FileReader API is not supported in this browser.');
       return;
     }
-    $i = $('#wpskins-import-file');
+    $i = $('#sfpskins-import-file');
     input = $i[0];
     if (input.files && input.files[0]) {
       file = input.files[0];
@@ -48,12 +48,26 @@ jQuery(function($) {
       return alert('File not selected or browser incompatible.');
     }
   };
-  $('#wpskins-import-start').click(function() {
+  $('#sfpskins-import-start').click(function() {
     return readFile(function(json, file) {
+      var jsonData;
       msg('Uploading file ' + file.name + '.');
-      return importSkins(json, function(res) {
-        return msg(res);
-      });
+      jsonData = JSON.parse(json);
+      if (jsonData) {
+        return importSkins(json, function(res) {
+          msg(res);
+          $('#sfp-skins-import > *:not(#sfpskins-import-msg)').hide();
+          $msg.animate({
+            marginTop: 2,
+            marginBottom: 2
+          });
+          return setTimeout(function() {
+            return window.location = location.href.replace(location.hash, '');
+          }, 1600);
+        });
+      } else {
+        return msg("Error: Uploaded file doesn't seem to be valid JSON");
+      }
     });
   });
   skinsSortingHandlers = {
@@ -92,8 +106,8 @@ jQuery(function($) {
       }
     }
   });
-  $('#wpskins-import-file').change(function() {
-    return $('#wpskins-import-start').fadeIn();
+  $('#sfpskins-import-file').change(function() {
+    return $('#sfpskins-import-start').fadeIn();
   });
   return $('#sfp-skins-save').click(function() {
     return importSkins(sfpSkins.data, function(res) {

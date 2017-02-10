@@ -1,6 +1,6 @@
 jQuery ( $ ) ->
 
-	$msg = $('#wpskins-import-msg')
+	$msg = $('#sfpskins-import-msg')
 	$xpA = $ '#export-skin'
 
 	msg = (msg) ->
@@ -32,7 +32,7 @@ jQuery ( $ ) ->
 		if !window.FileReader
 			alert 'The FileReader API is not supported in this browser.'
 			return
-		$i = $('#wpskins-import-file')
+		$i = $('#sfpskins-import-file')
 		input = $i[0]
 		if input.files and input.files[0]
 			file = input.files[0]
@@ -46,14 +46,26 @@ jQuery ( $ ) ->
 			alert 'File not selected or browser incompatible.'
 
 
-	$('#wpskins-import-start').click ->
+	$('#sfpskins-import-start').click ->
 		readFile ( json, file ) ->
 			msg 'Uploading file ' + file.name + '.'
-			importSkins(
-				json,
-				( res ) ->
-					msg res
-			)
+			jsonData = JSON.parse json;
+			if ( jsonData )
+				importSkins(
+					json,
+					( res ) ->
+						msg res
+						$ '#sfp-skins-import > *:not(#sfpskins-import-msg)'
+						.hide()
+						$msg.animate( {marginTop: 2, marginBottom: 2 } )
+						setTimeout(
+							->
+								window.location = location.href.replace( location.hash, '' )
+							, 1600
+						);
+				)
+			else
+				msg "Error: Uploaded file doesn't seem to be valid JSON"
 
 	skinsSortingHandlers =
 		fromList	: null
@@ -84,9 +96,9 @@ jQuery ( $ ) ->
 			else
 				console.log "No handler for action: " + action
 
-	$ '#wpskins-import-file'
+	$ '#sfpskins-import-file'
 	.change ->
-		$ '#wpskins-import-start'
+		$ '#sfpskins-import-start'
 		.fadeIn()
 
 	$ '#sfp-skins-save'

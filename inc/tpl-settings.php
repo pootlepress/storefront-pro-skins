@@ -38,10 +38,10 @@
 		}
 	</style>
 	<div id='sfp-skins-import'>
-		<div id="wpskins-import-msg"></div>
+		<div id="sfpskins-import-msg"></div>
 		<p>Please choose a file to import skins from.</p>
-		<p><input type="file" id="wpskins-import-file"></p>
-		<a class='button button-primary' type='button' id='wpskins-import-start' style='display:none;'>Import from file</a>
+		<p><input type="file" id="sfpskins-import-file"></p>
+		<a class='button button-primary' type='button' id='sfpskins-import-start' style='display:none;'>Import from file</a>
 		<a class='button right' href='#sfp-skins'>Cancel</a>
 	</div>
 	<div class='notice notice-warning' id='sfp-skins-reset'>
