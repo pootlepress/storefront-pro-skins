@@ -4,7 +4,7 @@ Plugin Name: Storefront Pro Skins
 Plugin URI: http://pootlepress.com/
 Description: Save instances of theme customization settings as skins and apply them on demand later.
 Author: pootlepress
-Version: 1.0.0
+Version: 0.5.0
 Author URI: http://pootlepress.com/
 @developer shramee <shramee.srivastav@gmail.com>
 */
@@ -71,7 +71,7 @@ class Storefront_Pro_Skins{
 		self::$file    = $file;
 		self::$url     = plugin_dir_url( $file );
 		self::$path    = plugin_dir_path( $file );
-		self::$version = '1.0.0';
+		self::$version = '0.5.0';
 
 		add_action( 'after_setup_theme', array( $this, 'setup' ) );
 	}
