@@ -1,6 +1,6 @@
 === Storefront Pro Skins ===
 
-Contributors: pootlepress, shramee
+Contributors: pootlepress, shramee, jamie
 Plugin Name: Storefront Pro Skins
 Plugin URI: http://www.pootlepress.com/storefront-pro-skins
 Tags: wordpress customizer, theme customizer, storefront, storefront pro, pootlepress, skins, presets
