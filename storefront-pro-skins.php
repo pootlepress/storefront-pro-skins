@@ -22,7 +22,7 @@ require 'inc/class-public.php';
  * @static string $path Plugin root dir path
  * @static string $version Plugin version
  */
-class Storefront_Pro_Skins{
+class Storefront_Pro_Skins {
 
 	/** @var Storefront_Pro_Skins Instance */
 	private static $_instance = null;
@@ -41,6 +41,8 @@ class Storefront_Pro_Skins{
 
 	/** @var string Plugin directory path */
 	public static $path;
+
+	public static $app_url;
 
 	/** @var Storefront_Pro_Skins_Admin Instance */
 	public $admin;
@@ -83,6 +85,13 @@ class Storefront_Pro_Skins{
 	public function setup() {
 		$theme = wp_get_theme();
 		if ( class_exists( 'Storefront_Pro' ) && ( $theme->name == 'Storefront' || $theme->parent_theme == 'Storefront' ) ) {
+
+			self::$app_url = 'https://storefront-pro-skins.firebaseapp.com/';
+
+			if ( defined( 'SFPS_DEBUG' ) && SFPS_DEBUG ) {
+				self::$app_url = 'http://localhost:4200/';
+			}
+
 			$this->_admin(); //Initiate admin
 			$this->_public(); //Initiate public
 		}

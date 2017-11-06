@@ -4,32 +4,34 @@ class Storefront_Pro_Skins_Customize_Control extends WP_Customize_Control {
 
 	function __construct( WP_Customize_Manager $manager, $id, array $args ) {
 		parent::__construct( $manager, $id, $args );
+
 	}
 
 	function render_content() {
 		$skins = json_decode( $this->value(), 'array' );
 		?>
-		<span class="customize-control-title">
-			Skins for Storefront Pro
-		</span>
-		<hr>
-		<div id="sfp-skins-wrap">
+		<div id="sfps-user-actions">
+			<a onclick="sfps.manage()" id="sfps-manage" class="btn button-primary">Apply/Manage skins</a>
+			<a onclick="sfps.logout()" id="sfps-logout" class="btn button">Logout</a>
+		</div>
+		<div id="sfps-new-user">
 			<?php
 			if ( $skins ) {
-				foreach ( $skins as $name => $data ) {
-					if ( empty( $data['sfpSkinHidden'] ) ) {
-						echo "<h3 class='sfp-skin-button'>$name<span class='delete dashicons dashicons-no'></span></h3>";
-					}
-				}
+				?>
+				Since version 2 we have moved skins storage to Storefront Skins cloud so they can be used on any site.
+				Log in to Storefront Skins cloud to find your old skins.
+				<?php
 			} else {
-				echo "<span class='no-skins'>You don't have any skins yet...</span>";
+				echo 'Login to pootle cloud to start saving and using skins.';
 			}
 			?>
+			<a onclick="sfps.loginPopup()" id="sfps-login" class="btn button-primary">Login</a>
 		</div>
-		<hr>
-		<span class="description customize-control-description">
-			Click on a skin to apply it, double click to rename it and click <span class='dashicons dashicons-no'></span> to delete.
-		</span>
+
+		<div id="sfps-app-wrap" style="display: none;" onclick="jQuery(this).fadeToggle()">
+			<i class="dashicons dashicons-no"></i>
+			<iframe src="<?php echo Storefront_Pro_Skins::$app_url ?>" frameborder="0" id="sfps-app"></iframe>
+		</div>
 		<?php
 	}
 }

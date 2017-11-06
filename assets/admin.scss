@@ -101,10 +101,12 @@ h3.sfp-skin-button {
 	cursor: pointer;
 	opacity: 0.88;
 	position: relative;
+	overflow: hidden;
 	&:hover {
 		opacity:1;
 	}
 
+	.sync,
 	.delete {
 		position: absolute;
 		top: 50%;
@@ -112,6 +114,20 @@ h3.sfp-skin-button {
 		right: 0.5em;
 	}
 
+	.sync {
+		background: inherit;
+		right: 1.6em;
+		margin-top: -15px;
+		padding: 5px 0;
+		transition: opacity 0.35s;
+		opacity: 0;
+	}
+
+	&:hover {
+		.sync {
+			opacity: 1;
+		}
+	}
 	~ .no-skins {
 		display: none;
 	}
@@ -145,4 +161,62 @@ h3.sfp-skin-button {
 
 #accordion-section-sfp_skins_section > .accordion-section-title {
 	display: none;
+}
+
+#sfps-new-user a.btn,
+#sfps-user-actions a.btn {
+	height: auto;
+	line-height: 2.5;
+	margin: 1em auto;
+	display: block;
+	text-align: center;
+}
+
+#sfps-user-actions {
+	a.btn {
+		&.right {
+			//width: 25%;
+		}
+	}
+}
+
+#sfps-app-wrap, #sfps-app {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1000000;
+	background: rgba(0,0,0,0.25);
+	margin: auto;
+}
+
+#sfps-app {
+	z-index: 0;
+	background: #fff;
+	width: calc( 100vw - 50px );
+	height: calc( 100vh - 50px );
+}
+
+#sfps-app-wrap > i {
+	display: block;
+	float: right;
+	font-size: 35px;
+	color: #fff;
+	padding: 3px;
+	position: relative;
+	z-index: 7;
+	cursor: pointer;
+	height: auto;
+	width: auto;
+	text-shadow: -1px 1px 3px rgba(0,0,0,.5);
+}
+
+.sfps-logged-in #sfps-new-user,
+#sfps-user-actions {
+	display: none;
+}
+
+.sfps-logged-in #sfps-user-actions {
+	display: block;
 }

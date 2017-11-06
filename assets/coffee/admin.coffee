@@ -4,6 +4,7 @@
  * @package Storefront_Pro_Skins
  * @version 1.0.0
 ###
+sfps = {}
 
 sfpSkins = if 'object' == typeof sfpSkins && sfpSkins then sfpSkins else {}
 
@@ -65,13 +66,13 @@ jQuery ($) ->
 		,1100
 		)
 
-	# Method: Prepare skins control
-	sfpSkins.refreshSkinControl = ( msg ) ->
+	# Method: Remove old skins
+	sfpSkins.removeSkinsFromSite = ( msg ) ->
 		sfpSkins.$wrap.html ''
 
 		data =
 			'action': 'sfp_skins_save'
-			'skins': JSON.stringify( sfpSkins.data )
+			'skins': '{}',
 			'theme': sfpSkins.theme
 
 		$.post( ajaxurl, data, (r) ->
@@ -81,30 +82,18 @@ jQuery ($) ->
 			console.log( 'WPSkins AJAX Failed:', r )
 			sfpSkins.notice 'Error: Could not connect to server'
 
-
-		$.each( sfpSkins.data, ( name, v ) ->
-
-			if ( 'undefined' is typeof v['sfpSkinHidden'] || ! v['sfpSkinHidden'] )
-				sfpSkins.$wrap.append(
-					$ '<h3></h3>'
-					.addClass 'sfp-skin-button'
-					.html name
-					.append(
-						$ '<span></span>'
-						.addClass 'delete dashicons dashicons-no'
-					)
-				)
-		)
-		sfpSkins.$wrap.append '<span class="no-skins">You don\'t have any skins for ' + sfpSkins.theme + ' theme...</span>'
-
 	# Method: Add skin to data
 	sfpSkins.addSkin = ( name, values ) ->
 		if ( sfpSkins.data && sfpSkins.data[ name ] )
 			if ( confirm 'Skin with name "' + name + '" already exists, Do you wanna over write it?' )
 				sfpSkins.data[ name ] = values
 		else
+			skin =
+				name: name,
+				data: values,
+
+			sfps.appMsg( 'saveSkin', skin );
 			sfpSkins.data[ name ] = values
-		sfpSkins.refreshSkinControl( 'Skin saved' );
 
 	# Method: Show skin save dialog
 	sfpSkins.showSaveDlg = () ->
@@ -127,7 +116,6 @@ jQuery ($) ->
 				sfpSkins.data[ skinName ] = sfpSkins.data[ sfpSkins.renameSkin ]
 				delete sfpSkins.data[ sfpSkins.renameSkin ]
 				delete sfpSkins.renameSkin
-				sfpSkins.refreshSkinControl( 'Skin renamed' );
 			$( '#sfp-skins-save-skin' ).text( 'Save skin' )
 			sfpSkins.notice 'Skin Renamed'
 		else
@@ -143,35 +131,10 @@ jQuery ($) ->
 				undefined
 			)
 			console.log(count + ' settings saved')
+
 			sfpSkins.addSkin( skinName, values )
 			sfpSkins.closeSaveDlg()
-			#sfpSkins.notice 'Skin Saved'
-
-	# Method: Clicked skin
-	sfpSkins.clickedSkin = ( e ) ->
-		$t = $( e.target )
-		skin = $t.closest( '.sfp-skin-button' ).text()
-
-		if $t.is( '.sfp-skin-button .delete' )
-			if confirm 'Are you sure you want to delete "' + skin + '" skin?'
-				delete sfpSkins.data[ skin ]
-				sfpSkins.refreshSkinControl( 'Skin deleted' );
-		else if $t.is( '.sfp-skin-button' )
-			settings = sfpSkins.data[ skin ]
-			if ( settings )
-				sfpSkins.$skinApplyConfirmDialog
-				.data( 'skin', skin )
-				.data( 'settings', settings )
-				.show().find '.skin-name'
-				.html skin
-
-	# Method: Clicked skin
-	sfpSkins.doubleClickedSkin = ( e ) ->
-		$t = $( e.target )
-		sfpSkins.renameSkin = $t.closest( '.sfp-skin-button' ).text()
-		$( '#sfp-skins-skin-name' ).val( sfpSkins.renameSkin )
-		$( '#sfp-skins-save-skin' ).text( 'Rename' )
-		sfpSkins.showSaveDlg()
+			sfpSkins.notice 'Skin Saved'
 
 	# Prepare maps for settings
 	sfpSkins.prepMaps()
@@ -218,3 +181,61 @@ jQuery ($) ->
 				sfpSkins.clickedSkin( e )
 			sfpSkins.timesClickedSkin = false
 		, 250 )
+
+	$bd = $( 'body' );
+	$appWrap = $( '#sfps-app-wrap' );
+
+
+	sfps =
+		postMsgActions:
+			loggedIn: ->
+				$bd.addClass 'sfps-logged-in'
+				$appWrap.fadeOut()
+				return
+			loggedOut: ->
+				return
+			applySkin: (skn) ->
+				$appWrap.fadeOut()
+				if ( skn )
+					sfpSkins.$skinApplyConfirmDialog
+						.data( 'skin', skn.name )
+						.data( 'settings', skn.data )
+						.show()
+						.find( '.skin-name' ).html skn.name
+				return
+		saveRow: ->
+			if $bd.hasClass('sfps-logged-in')
+				$nameDlg.ppbDialog 'open'
+			else
+				alert 'You need to login to your pootle cloud account before you can save templates.'
+			return
+		manage: ->
+			$appWrap.fadeIn()
+			return
+		logout: ->
+			sfps.appMsg 'logout'
+			return
+		loginPopup: ->
+			sfps.showLogin = true
+			$appWrap.fadeIn()
+			return
+		appMsg: (cb, payload) ->
+			sfps.appWin.postMessage {
+				sfpsCallback: cb
+				payload: payload
+			}, '*'
+			return
+		receiveMessage: (e) ->
+			callback = undefined
+			payload = undefined
+			msg = e[if e.message then 'message' else 'data']
+			if e.origin.replace(/http[s]?:\/\//, '').indexOf(sfpsData.appUrl) and msg.sfpsCallback
+				callback = msg.sfpsCallback
+				payload = msg.payload
+				console.log( callback )
+				if typeof sfps.postMsgActions[callback] == 'function'
+	# Call post message action callback
+					sfps.postMsgActions[callback] payload
+					sfps.appWin = e.source
+			return
+	window.addEventListener( 'message', sfps.receiveMessage, false );

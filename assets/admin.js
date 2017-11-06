@@ -5,14 +5,17 @@
  * @package Storefront_Pro_Skins
  * @version 1.0.0
  */
-var sfpSkins,
+var sfpSkins, sfps,
   indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
+sfps = {};
 
 sfpSkins = 'object' === typeof sfpSkins && sfpSkins ? sfpSkins : {};
 
 sfpSkins.data = 'object' === typeof sfpSkins.data && sfpSkins.data ? sfpSkins.data : {};
 
 jQuery(function($) {
+  var $appWrap, $bd;
   sfpSkins.$orle = $('#sfp-skins-overlay');
   sfpSkins.$dlg = $('#sfp-skins-dialog');
   sfpSkins.$wrap = $('#sfp-skins-wrap');
@@ -67,15 +70,15 @@ jQuery(function($) {
       return $('#sfp-skins-notice').html('').fadeOut(250);
     }, 1100);
   };
-  sfpSkins.refreshSkinControl = function(msg) {
+  sfpSkins.removeSkinsFromSite = function(msg) {
     var data;
     sfpSkins.$wrap.html('');
     data = {
       'action': 'sfp_skins_save',
-      'skins': JSON.stringify(sfpSkins.data),
+      'skins': '{}',
       'theme': sfpSkins.theme
     };
-    $.post(ajaxurl, data, function(r) {
+    return $.post(ajaxurl, data, function(r) {
       console.log('WPSkins AJAX Success:', r);
       if (msg) {
         return sfpSkins.notice(msg);
@@ -84,22 +87,21 @@ jQuery(function($) {
       console.log('WPSkins AJAX Failed:', r);
       return sfpSkins.notice('Error: Could not connect to server');
     });
-    $.each(sfpSkins.data, function(name, v) {
-      if ('undefined' === typeof v['sfpSkinHidden'] || !v['sfpSkinHidden']) {
-        return sfpSkins.$wrap.append($('<h3></h3>').addClass('sfp-skin-button').html(name).append($('<span></span>').addClass('delete dashicons dashicons-no')));
-      }
-    });
-    return sfpSkins.$wrap.append('<span class="no-skins">You don\'t have any skins for ' + sfpSkins.theme + ' theme...</span>');
   };
   sfpSkins.addSkin = function(name, values) {
+    var skin;
     if (sfpSkins.data && sfpSkins.data[name]) {
       if (confirm('Skin with name "' + name + '" already exists, Do you wanna over write it?')) {
-        sfpSkins.data[name] = values;
+        return sfpSkins.data[name] = values;
       }
     } else {
-      sfpSkins.data[name] = values;
+      skin = {
+        name: name,
+        data: values
+      };
+      sfps.appMsg('saveSkin', skin);
+      return sfpSkins.data[name] = values;
     }
-    return sfpSkins.refreshSkinControl('Skin saved');
   };
   sfpSkins.showSaveDlg = function() {
     sfpSkins.$;
@@ -119,7 +121,6 @@ jQuery(function($) {
         sfpSkins.data[skinName] = sfpSkins.data[sfpSkins.renameSkin];
         delete sfpSkins.data[sfpSkins.renameSkin];
         delete sfpSkins.renameSkin;
-        sfpSkins.refreshSkinControl('Skin renamed');
       }
       $('#sfp-skins-save-skin').text('Save skin');
       return sfpSkins.notice('Skin Renamed');
@@ -142,32 +143,9 @@ jQuery(function($) {
       });
       console.log(count + ' settings saved');
       sfpSkins.addSkin(skinName, values);
-      return sfpSkins.closeSaveDlg();
+      sfpSkins.closeSaveDlg();
+      return sfpSkins.notice('Skin Saved');
     }
-  };
-  sfpSkins.clickedSkin = function(e) {
-    var $t, settings, skin;
-    $t = $(e.target);
-    skin = $t.closest('.sfp-skin-button').text();
-    if ($t.is('.sfp-skin-button .delete')) {
-      if (confirm('Are you sure you want to delete "' + skin + '" skin?')) {
-        delete sfpSkins.data[skin];
-        return sfpSkins.refreshSkinControl('Skin deleted');
-      }
-    } else if ($t.is('.sfp-skin-button')) {
-      settings = sfpSkins.data[skin];
-      if (settings) {
-        return sfpSkins.$skinApplyConfirmDialog.data('skin', skin).data('settings', settings).show().find('.skin-name').html(skin);
-      }
-    }
-  };
-  sfpSkins.doubleClickedSkin = function(e) {
-    var $t;
-    $t = $(e.target);
-    sfpSkins.renameSkin = $t.closest('.sfp-skin-button').text();
-    $('#sfp-skins-skin-name').val(sfpSkins.renameSkin);
-    $('#sfp-skins-save-skin').text('Rename');
-    return sfpSkins.showSaveDlg();
   };
   sfpSkins.prepMaps();
   $('#customize-header-actions').after($('#sfp-skins-actions'));
@@ -188,7 +166,7 @@ jQuery(function($) {
     return sfpSkins.notice('Skin applied.');
   });
   sfpSkins.$orle.click(sfpSkins.closeSaveDlg);
-  return sfpSkins.$wrap.click(function(e) {
+  sfpSkins.$wrap.click(function(e) {
     if (sfpSkins.timesClickedSkin === 1) {
       sfpSkins.doubleClickedSkin(e);
       sfpSkins.timesClickedSkin = 2;
@@ -202,4 +180,60 @@ jQuery(function($) {
       return sfpSkins.timesClickedSkin = false;
     }, 250);
   });
+  $bd = $('body');
+  $appWrap = $('#sfps-app-wrap');
+  sfps = {
+    postMsgActions: {
+      loggedIn: function() {
+        $bd.addClass('sfps-logged-in');
+        $appWrap.fadeOut();
+      },
+      loggedOut: function() {},
+      applySkin: function(skn) {
+        $appWrap.fadeOut();
+        if (skn) {
+          sfpSkins.$skinApplyConfirmDialog.data('skin', skn.name).data('settings', skn.data).show().find('.skin-name').html(skn.name);
+        }
+      }
+    },
+    saveRow: function() {
+      if ($bd.hasClass('sfps-logged-in')) {
+        $nameDlg.ppbDialog('open');
+      } else {
+        alert('You need to login to your pootle cloud account before you can save templates.');
+      }
+    },
+    manage: function() {
+      $appWrap.fadeIn();
+    },
+    logout: function() {
+      sfps.appMsg('logout');
+    },
+    loginPopup: function() {
+      sfps.showLogin = true;
+      $appWrap.fadeIn();
+    },
+    appMsg: function(cb, payload) {
+      sfps.appWin.postMessage({
+        sfpsCallback: cb,
+        payload: payload
+      }, '*');
+    },
+    receiveMessage: function(e) {
+      var callback, msg, payload;
+      callback = void 0;
+      payload = void 0;
+      msg = e[e.message ? 'message' : 'data'];
+      if (e.origin.replace(/http[s]?:\/\//, '').indexOf(sfpsData.appUrl) && msg.sfpsCallback) {
+        callback = msg.sfpsCallback;
+        payload = msg.payload;
+        console.log(callback);
+        if (typeof sfps.postMsgActions[callback] === 'function') {
+          sfps.postMsgActions[callback](payload);
+          sfps.appWin = e.source;
+        }
+      }
+    }
+  };
+  return window.addEventListener('message', sfps.receiveMessage, false);
 });

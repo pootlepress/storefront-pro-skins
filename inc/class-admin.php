@@ -106,6 +106,11 @@ class Storefront_Pro_Skins_Admin {
 			'data'	=> ! $skins ? new stdClass() : $skins,
 			'theme'	=> 'storefront',
 		) );
+
+		wp_localize_script( $token . '-js', 'sfpsData', array(
+			'data'	=> ! $skins ? new stdClass() : $skins,
+			'theme'	=> 'storefront',
+		) );
 	}
 
 	/**
