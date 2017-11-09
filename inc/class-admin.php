@@ -84,13 +84,20 @@ class Storefront_Pro_Skins_Admin {
 		</div>
 
 		<div id="sfp-skins-actions" class="wp-full-overlay-header">
-			<a id="sfp-skins-view" class="button view-skins"
-			   onclick="wp.customize.section.value( 'sfp_skins_section' ).expand()">
-				<span class="dashicons dashicons-admin-appearance"></span> View skins
-			</a>
-			<a class="button button-primary" id="sfp-skins-save-dialog" title="Save as a skin">
-				<span class="dashicons dashicons-plus-alt"></span> Save skin
-			</a>
+			<div id="sfps-user-actions">
+
+				<a onclick="sfps.manage()" id="sfps-manage" class="button view-skins">
+					Manage skins
+				</a>
+				<a class="button button-primary" id="sfp-skins-save-dialog" title="Save as a skin">
+					Save skin
+				</a>
+
+			</div>
+			<div id="sfps-new-user">
+				Login to Storefront Pro Skins app
+				<a onclick="sfps.loginPopup()" id="sfps-login" class="btn button-primary">Login</a>
+			</div>
 		</div>
 		<?php
 
