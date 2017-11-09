@@ -204,7 +204,6 @@ class Storefront_Pro_Skins_Admin {
 		$skins = json_decode( $json, 'assoc_array' );
 
 		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sfpskins_import_settings' ) ) {
-			var_dump( $_POST );
 			die( 'failed: Nonce validation failed.' );
 		}
 
