@@ -89,16 +89,21 @@ class Storefront_Pro_Skins_Admin {
 				<a onclick="sfps.manage()" id="sfps-manage" class="button view-skins">
 					Manage skins
 				</a>
-				<a class="button button-primary" id="sfp-skins-save-dialog" title="Save as a skin">
+				<a class="right button button-primary" id="sfp-skins-save-dialog" title="Save as a skin">
 					Save skin
 				</a>
 
 			</div>
 			<div id="sfps-new-user">
-				Login to Storefront Pro Skins app
-				<a onclick="sfps.loginPopup()" id="sfps-login" class="btn button-primary">Login</a>
+				<a onclick="sfps.loginPopup()" id="sfps-login" class="btn button-primary">Login</a> to Storefront Pro Skins app
 			</div>
 		</div>
+
+		<div id="sfps-app-wrap" style="display: none;" onclick="jQuery(this).fadeToggle()">
+			<i class="dashicons dashicons-no"></i>
+			<iframe src="<?php echo Storefront_Pro_Skins::$app_url ?>" frameborder="0" id="sfps-app"></iframe>
+		</div>
+
 		<?php
 
 		$token = $this->token;

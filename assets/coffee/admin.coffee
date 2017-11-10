@@ -193,6 +193,8 @@ jQuery ($) ->
 				$appWrap.fadeOut()
 				return
 			loggedOut: ->
+				$bd.removeClass 'sfps-logged-in'
+				$appWrap.fadeOut()
 				return
 			applySkin: (skn) ->
 				$appWrap.fadeOut()
