@@ -107,7 +107,6 @@ class Storefront_Pro_Skins {
 		//Enqueue admin end JS and CSS
 		add_action( 'customize_controls_print_footer_scripts',	array( $this->admin, 'enqueue' ) );
 		add_action( 'admin_enqueue_scripts',					array( $this->admin, 'admin_enqueue' ) );
-		add_action( 'customize_register',						array( $this->admin, 'customize_register' ) );
 		add_action( 'admin_menu',								array( $this->admin, 'admin_menu' ) );
 		add_action( 'wp_ajax_sfp_skins_save',					array( $this->admin, 'ajax_sfp_skins_save' ) );
 		add_action( 'wp_ajax_sfp_skins_export',					array( $this->admin, 'ajax_sfp_skins_export' ) );

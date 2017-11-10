@@ -125,37 +125,6 @@ class Storefront_Pro_Skins_Admin {
 		) );
 	}
 
-	/**
-	 * Registers customizer elements
-	 * @param WP_Customize_Manager $wp_customize
-	 */
-	public function customize_register( $wp_customize ) {
-		require_once 'class-customize-control.php';
-
-		$wp_customize->add_section( 'sfp_skins_section',
-			array(
-				'title' => __( 'Skins', 'sfp-skins' ),
-				'priority' => -7,
-				'description' => __('Save and apply customizer settings as skins.', 'sfp-skin'),
-			)
-		);
-
-		$wp_customize->add_setting( 'sfp_skins_data',
-			array(
-				'type' => 'option',
-				'transport' => 'refresh',
-			)
-		);
-
-		$wp_customize->add_control(
-			new Storefront_Pro_Skins_Customize_Control( $wp_customize, 'sfp_skins_data', array(
-				'label' => __( 'Skins for this theme', 'sfp-skin' ),
-				'section' => 'sfp_skins_section',
-				'settings' => 'sfp_skins_data',
-				'priority' => 7,
-			) ) );
-
-	}
 	/** Adds admin menu */
 	public function admin_menu() {
 		add_theme_page(
