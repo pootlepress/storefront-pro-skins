@@ -79,9 +79,11 @@ class Storefront_Pro_Skins_Admin {
 		</div>
 		<div id="sfp-skins-notice" style="display: none;">This is a notice</div>
 		<div id="sfp-skins-apply-confirm" style="display: none;">
-			<p>Are you sure you want to apply "<span class="skin-name"></span>" skin? Your current changes will be lost!
-				<button id="sfp-skins-apply" class="button button-primary">Yeah, Apply skin</button>
-				<button id="sfp-skins-dont-apply" onclick="jQuery(this).parent.hide()" class="button">Cancel</button>
+			<p>
+				Are you sure you want to apply "<span class="skin-name"></span>" skin? Your current changes will be lost!
+			</p>
+			<button id="sfp-skins-apply" class="button button-primary">Yeah, Apply skin</button>
+			<button id="sfp-skins-dont-apply" onclick="jQuery(this).parent().hide()" class="button">Cancel</button>
 		</div>
 
 		<div id="sfp-skins-actions" class="wp-full-overlay-header">
