@@ -90,18 +90,11 @@ jQuery(function($) {
   };
   sfpSkins.addSkin = function(name, values) {
     var skin;
-    if (sfpSkins.data && sfpSkins.data[name]) {
-      if (confirm('Skin with name "' + name + '" already exists, Do you wanna over write it?')) {
-        return sfpSkins.data[name] = values;
-      }
-    } else {
-      skin = {
-        name: name,
-        data: values
-      };
-      sfps.appMsg('saveSkin', skin);
-      return sfpSkins.data[name] = values;
-    }
+    skin = {
+      name: name,
+      data: values
+    };
+    return sfps.appMsg('saveSkin', skin);
   };
   sfpSkins.showSaveDlg = function() {
     sfpSkins.$;
@@ -116,36 +109,26 @@ jQuery(function($) {
     var count, skinName, values;
     skinName = $('#sfp-skins-skin-name').val();
     $('#sfp-skins-skin-name').val('');
-    if ('string' === typeof sfpSkins.renameSkin) {
-      if (sfpSkins.renameSkin !== skinName) {
-        sfpSkins.data[skinName] = sfpSkins.data[sfpSkins.renameSkin];
-        delete sfpSkins.data[sfpSkins.renameSkin];
-        delete sfpSkins.renameSkin;
-      }
-      $('#sfp-skins-save-skin').text('Save skin');
-      return sfpSkins.notice('Skin Renamed');
-    } else {
-      count = 0;
-      values = {};
-      $.each(sfpSkins.settingsMaps, function(setID, conID) {
-        var val;
-        count++;
-        val = sfpSkins.get(conID);
-        if (val !== 'sfp_skins_no_value') {
-          if (val === 'false') {
-            val = '';
-          }
-          if (typeof val === 'string') {
-            values[setID] = val;
-          }
+    count = 0;
+    values = {};
+    $.each(sfpSkins.settingsMaps, function(setID, conID) {
+      var val;
+      count++;
+      val = sfpSkins.get(conID);
+      if (val !== 'sfp_skins_no_value') {
+        if (val === 'false') {
+          val = '';
         }
-        return void 0;
-      });
-      console.log(count + ' settings saved');
-      sfpSkins.addSkin(skinName, values);
-      sfpSkins.closeSaveDlg();
-      return sfpSkins.notice('Skin Saved');
-    }
+        if (typeof val === 'string') {
+          values[setID] = val;
+        }
+      }
+      return void 0;
+    });
+    console.log(count + ' settings saved');
+    sfpSkins.addSkin(skinName, values);
+    sfpSkins.closeSaveDlg();
+    return sfpSkins.notice('Skin Saved');
   };
   sfpSkins.prepMaps();
   $('#customize-header-actions').after($('#sfp-skins-actions'));
@@ -186,9 +169,14 @@ jQuery(function($) {
     postMsgActions: {
       loggedIn: function() {
         $bd.addClass('sfps-logged-in');
+        $bd.removeClass('sfps-logged-out');
         $appWrap.fadeOut();
       },
-      loggedOut: function() {},
+      loggedOut: function() {
+        $bd.removeClass('sfps-logged-in');
+        $bd.addClass('sfps-logged-out');
+        $appWrap.fadeOut();
+      },
       applySkin: function(skn) {
         $appWrap.fadeOut();
         if (skn) {

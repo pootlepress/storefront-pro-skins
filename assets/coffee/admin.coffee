@@ -84,16 +84,11 @@ jQuery ($) ->
 
 	# Method: Add skin to data
 	sfpSkins.addSkin = ( name, values ) ->
-		if ( sfpSkins.data && sfpSkins.data[ name ] )
-			if ( confirm 'Skin with name "' + name + '" already exists, Do you wanna over write it?' )
-				sfpSkins.data[ name ] = values
-		else
-			skin =
-				name: name,
-				data: values,
+		skin =
+			name: name,
+			data: values,
 
-			sfps.appMsg( 'saveSkin', skin );
-			sfpSkins.data[ name ] = values
+		sfps.appMsg( 'saveSkin', skin );
 
 	# Method: Show skin save dialog
 	sfpSkins.showSaveDlg = () ->
@@ -111,30 +106,22 @@ jQuery ($) ->
 		skinName = $( '#sfp-skins-skin-name' ).val()
 		$( '#sfp-skins-skin-name' ).val( '' )
 
-		if 'string' is typeof sfpSkins.renameSkin
-			if sfpSkins.renameSkin isnt skinName
-				sfpSkins.data[ skinName ] = sfpSkins.data[ sfpSkins.renameSkin ]
-				delete sfpSkins.data[ sfpSkins.renameSkin ]
-				delete sfpSkins.renameSkin
-			$( '#sfp-skins-save-skin' ).text( 'Save skin' )
-			sfpSkins.notice 'Skin Renamed'
-		else
-			count = 0
-			values = {}
-			$.each( sfpSkins.settingsMaps, ( setID, conID ) ->
-				count++
-				val = sfpSkins.get( conID ) # Get data with control ID
-				if ( val != 'sfp_skins_no_value' )
-					if val is 'false' then val = ''
-					if typeof val is 'string'
-						values[ setID ] = val # Set data with setting ID
-				undefined
-			)
-			console.log(count + ' settings saved')
+		count = 0
+		values = {}
+		$.each( sfpSkins.settingsMaps, ( setID, conID ) ->
+			count++
+			val = sfpSkins.get( conID ) # Get data with control ID
+			if ( val != 'sfp_skins_no_value' )
+				if val is 'false' then val = ''
+				if typeof val is 'string'
+					values[ setID ] = val # Set data with setting ID
+			undefined
+		)
+		console.log(count + ' settings saved')
 
-			sfpSkins.addSkin( skinName, values )
-			sfpSkins.closeSaveDlg()
-			sfpSkins.notice 'Skin Saved'
+		sfpSkins.addSkin( skinName, values )
+		sfpSkins.closeSaveDlg()
+		sfpSkins.notice 'Skin Saved'
 
 	# Prepare maps for settings
 	sfpSkins.prepMaps()
@@ -190,10 +177,12 @@ jQuery ($) ->
 		postMsgActions:
 			loggedIn: ->
 				$bd.addClass 'sfps-logged-in'
+				$bd.removeClass 'sfps-logged-out'
 				$appWrap.fadeOut()
 				return
 			loggedOut: ->
 				$bd.removeClass 'sfps-logged-in'
+				$bd.addClass 'sfps-logged-out'
 				$appWrap.fadeOut()
 				return
 			applySkin: (skn) ->

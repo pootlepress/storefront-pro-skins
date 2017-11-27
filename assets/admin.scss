@@ -50,9 +50,24 @@
 
 #sfp-skins-dialog {
 	background: none;
-	height: 39px;
 	width: 90vw;
 	max-width: 520px;
+	height: 120px;
+	background: #fff;
+	padding: 0 16px;
+	header {
+		padding: 16px 16px 11px;
+		font: 300 16px sans-serif;
+		background: #ddd;
+		text-transform: uppercase;
+		margin: 0 -16px 16px;
+		.dashicons-no {
+			float: right;
+			margin: -16px;
+			padding: 13px;
+			cursor: pointer;
+		}
+	}
 	> input, > button {
 		text-align: center;
 		line-height: 35px;
@@ -133,10 +148,6 @@ h3.sfp-skin-button {
 	}
 }
 
-.wp-full-overlay-sidebar .wp-full-overlay-sidebar-content {
-	top: 90px;
-}
-
 #sfp-skins-actions {
 	position: absolute;
 	top: 45px;
@@ -144,6 +155,8 @@ h3.sfp-skin-button {
 	right: 0;
 	border-top: 1px solid #ccc;
 	border-bottom: 1px solid #ccc;
+	padding: 0 1em;
+	display: none;
 	.button {
 		margin: 7px 0;
 		padding: 0 10px 0 7px;
@@ -155,6 +168,16 @@ h3.sfp-skin-button {
 
 	#sfp-skins-view {
 		float: left;
+	}
+}
+
+body[class*='sfps-logged-'] {
+	#customize-controls #customize-notifications-area,
+	.wp-full-overlay-sidebar-content {
+		top: 90px;
+	}
+	#sfp-skins-actions {
+		display: block;
 	}
 }
 
@@ -206,11 +229,12 @@ h3.sfp-skin-button {
 	text-shadow: -1px 1px 3px rgba(0,0,0,.5);
 }
 
-.sfps-logged-in #sfps-new-user,
+#sfps-new-user,
 #sfps-user-actions {
 	display: none;
 }
 
+.sfps-logged-out #sfps-new-user,
 .sfps-logged-in #sfps-user-actions {
 	display: block;
 }
