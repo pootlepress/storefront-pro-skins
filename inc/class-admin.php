@@ -67,7 +67,7 @@ class Storefront_Pro_Skins_Admin {
 		?>
 		<div id="sfp-skins-overlay" style="display: none;"></div>
 		<div id="sfp-skins-dialog" style="display: none;">
-			<header>Save skin <span class="dashicons dashicons-no"></span></header>
+			<header>Save skin <span class="dashicons dashicons-no" onclick="sfpSkins.closeSaveDlg()"></span></header>
 			<div class="notice already-exists" style="display: none">
 				<p>
 					Skin with this name already exists. Rename the skin or
