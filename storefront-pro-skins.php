@@ -4,7 +4,7 @@ Plugin Name: Storefront Pro Skins
 Plugin URI: http://pootlepress.com/
 Description: Save instances of theme customization settings as skins and apply them on demand later.
 Author: pootlepress
-Version: 0.5.0
+Version: 1.0.beta
 Author URI: http://pootlepress.com/
 @developer shramee <shramee.srivastav@gmail.com>
 */
@@ -106,12 +106,7 @@ class Storefront_Pro_Skins {
 
 		//Enqueue admin end JS and CSS
 		add_action( 'customize_controls_print_footer_scripts',	array( $this->admin, 'enqueue' ) );
-		add_action( 'admin_enqueue_scripts',					array( $this->admin, 'admin_enqueue' ) );
-		add_action( 'admin_menu',								array( $this->admin, 'admin_menu' ) );
-		add_action( 'wp_ajax_sfp_skins_save',					array( $this->admin, 'ajax_sfp_skins_save' ) );
-		add_action( 'wp_ajax_sfp_skins_export',					array( $this->admin, 'ajax_sfp_skins_export' ) );
-		add_action( 'wp_ajax_sfp_skins_import',					array( $this->admin, 'ajax_sfp_skins_import' ) );
-
+		add_action( 'wp_ajax_sfp_clear_skins',					array( $this->admin, 'ajax_sfp_clear_skins' ) );
 	}
 
 	/**

@@ -120,117 +120,20 @@ class Storefront_Pro_Skins_Admin {
 		wp_localize_script( $token . '-js', 'sfpSkins', array(
 			'data'	=> ! $skins ? new stdClass() : $skins,
 			'theme'	=> 'storefront',
-		) );
-
-		wp_localize_script( $token . '-js', 'sfpsData', array(
-			'data'	=> ! $skins ? new stdClass() : $skins,
-			'theme'	=> 'storefront',
+			'appUrl' => Storefront_Pro_Skins::$app_url,
 		) );
 	}
 
-	/** Adds admin menu */
-	public function admin_menu() {
-		add_theme_page(
-			'Storefront Pro Skins',
-			'Storefront Pro Skins',
-			'manage_options',
-			$this->token,
-			function () {
-				include dirname( __FILE__ ) . '/tpl-settings.php';
-			}
-		);
-	}
-
-	/** AJAX action to save skins data */
-	public function ajax_sfp_skins_save() {
+	public function ajax_sfp_clear_skins() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			die( "You don't have permission to manage options." );
 		}
 
-		if ( empty( $_POST['skins'] ) ) {
-			die( "Skins data required." );
-		}
-
-		if ( is_array( $_POST['skins'] ) ) {
-			$skins = json_encode( $_POST['skins'] );
-		} else {
-			$skins = stripslashes( $_POST['skins'] );
-		}
-
-		if ( update_option( 'sfp_skins_data', $skins ) ) {
+		if ( delete_option( 'sfp_skins_data' ) ) {
 			die( 'Success: Skins updated' );
 		}
 
 		die( 'Success: Skin data identical.' );
-	}
 
-	/** AJAX action to export skins data */
-	public function ajax_sfp_skins_export() {
-		$json = get_option( 'sfp_skins_data', '{}' );
-		$skins = json_decode( $json, 'assoc_array' );
-		if ( ! empty( $_REQUEST['skin'] ) ) {
-			$skin_name = $_REQUEST['skin'];
-			$skin = empty( $skins[ $skin_name ] ) ? array() : $skins[ $skin_name ];
-			die(
-				json_encode(
-					array(
-						$skin_name => $skin
-					)
-				)
-			);
-		}
-		die( $json );
-	}
-
-	/** AJAX action to import skins data */
-	public function ajax_sfp_skins_import() {
-		$json = get_option( 'sfp_skins_data', '{}' );
-		$skins = json_decode( $json, 'assoc_array' );
-
-		if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'sfpskins_import_settings' ) ) {
-			die( 'failed: Nonce validation failed.' );
-		}
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			die( 'failed: You don\'t have permission to manage options.' );
-		}
-
-		if ( empty( $_POST['json'] ) ) {
-			die( 'failed: File contains no data.' );
-		}
-
-		$new_skins = json_decode( stripslashes( $_POST['json'] ), 'assoc_array' );
-
-		if ( ! $new_skins ) {
-			die( "failed: Skin data malformed.\n\n" . $_POST['json'] );
-		}
-
-		$skins = wp_parse_args( $new_skins, $skins );
-
-		update_option( 'sfp_skins_data', json_encode( $skins ) );
-
-		die( 'success: Skins successfully imported from the file.' );
-	}
-
-	/**
-	 * Adds front end stylesheet and js
-	 * @action wp_enqueue_scripts
-	 */
-	public function admin_enqueue() {
-		if ( ! filter_input( INPUT_GET, 'page' ) == 'sfp-skins' ) return;
-
-		$token = $this->token;
-		$url = $this->url;
-		wp_enqueue_style( $token . '-css', $url . '/assets/skins-manager.css' );
-		wp_enqueue_script( $token . '-js-skin-man', $url . '/assets/skins-manager.js', array( 'jquery', 'jquery-ui-sortable' ) );
-
-		$skins = json_decode( get_option( 'sfp_skins_data', '{}' ), 'array' );
-
-		wp_localize_script( $token . '-js-skin-man', 'sfpSkins', array(
-			'data'	=> ! $skins ? new stdClass() : $skins,
-			'theme'	=> 'storefront',
-			'ajaxurl'	=> admin_url( 'admin-ajax.php' ),
-			'importNonce' => wp_create_nonce( 'sfpskins_import_settings' ),
-		) );
 	}
 }
