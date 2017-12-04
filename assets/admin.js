@@ -95,7 +95,7 @@ jQuery( function ( $ ) {
 			}
 
 		} );
-
+		return values;
 	};
 
 	sfpSkins.saveSkin = function ( name, values ) {
@@ -143,7 +143,7 @@ jQuery( function ( $ ) {
 	$( '#sfp-skins-save-skin' ).click( function () {
 		var $sknName = $( '#sfp-skins-skin-name' );
 
-		sfpSkins.saveSkin( $sknName.val(), sfpSkins.getSkinValues );
+		sfpSkins.saveSkin( $sknName.val(), sfpSkins.getSkinValues() );
 
 		$sknName.val( '' );
 
