@@ -87,6 +87,9 @@ class Storefront_Pro_Skins_Admin {
 		</div>
 
 		<div id="sfp-skins-actions" class="wp-full-overlay-header">
+			<div id="sfps-connecting">
+				Connecting with Storefront Skins Cloud...
+			</div>
 			<div id="sfps-user-actions">
 
 				<a onclick="sfps.manage()" id="sfps-manage" class="button view-skins">
@@ -98,7 +101,7 @@ class Storefront_Pro_Skins_Admin {
 
 			</div>
 			<div id="sfps-new-user">
-				<a onclick="sfps.loginPopup()" id="sfps-login" class="btn button-primary">Login</a> to Storefront Pro Skins app
+				<a onclick="sfps.loginPopup()" id="sfps-login" class="btn button-primary">Login</a> to Storefront Skins Cloud
 			</div>
 		</div>
 
