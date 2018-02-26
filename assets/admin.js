@@ -257,5 +257,10 @@ jQuery( function ( $ ) {
 			}
 		}
 	};
-	return window.addEventListener( 'message', sfps.receiveMessage, false );
+
+	window.addEventListener( 'message', sfps.receiveMessage, false );
+
+	console.log( sfpSkins.appUrl );
+
+	$appWrap.find( 'iframe' ).attr( 'src', sfpSkins.appUrl );
 } );

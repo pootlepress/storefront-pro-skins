@@ -107,7 +107,7 @@ class Storefront_Pro_Skins_Admin {
 
 		<div id="sfps-app-wrap" style="display: none;" onclick="jQuery(this).fadeToggle()">
 			<i class="dashicons dashicons-no"></i>
-			<iframe src="<?php echo Storefront_Pro_Skins::$app_url ?>" frameborder="0" id="sfps-app"></iframe>
+			<iframe frameborder="0" id="sfps-app"></iframe>
 		</div>
 
 		<?php
