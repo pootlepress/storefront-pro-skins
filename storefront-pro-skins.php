@@ -88,7 +88,7 @@ class Storefront_Pro_Skins {
 
 			self::$app_url = 'https://storefront-pro-skins.firebaseapp.com/';
 
-			if ( defined( 'SFPS_DEBUG' ) && SFPS_DEBUG ) {
+			if ( isset( $_REQUEST['SFPS_DEBUG'] ) || ( defined( 'SFPS_DEBUG' ) && SFPS_DEBUG ) ) {
 				self::$app_url = 'http://localhost:4200/';
 			}
 
