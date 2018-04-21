@@ -93,7 +93,7 @@ class Storefront_Pro_Skins_Admin {
 			<div id="sfps-user-actions">
 
 				<a onclick="sfps.manage()" id="sfps-manage" class="button view-skins">
-					Manage skins
+					Choose skin
 				</a>
 				<a class="right button button-primary" id="sfp-skins-save-dialog" title="Save as a skin">
 					Save skin
