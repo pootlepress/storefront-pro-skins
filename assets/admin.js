@@ -73,10 +73,14 @@ jQuery( function ( $ ) {
 		if ( ! message ) {
 			return;
 		}
-		$( '#sfp-skins-notice' ).html( '<div id="sfp-skins-notice-message">' + message + '</div>' ).fadeIn( 250 );
+		$( '#sfp-skins-notice' )
+			.html( '<div id="sfp-skins-notice-message">' + message + '</div>' )
+			.fadeIn( 250 );
+
 		setTimeout( function () {
 			return $( '#sfp-skins-notice' ).html( '' ).fadeOut( 250 );
-		}, 2000 );
+		}, 2500 );
+
 	};
 
 	sfpSkins.getSkinValues = function () {
@@ -151,21 +155,6 @@ jQuery( function ( $ ) {
 		sfpSkins.notice( 'Skin Saved' );
 	} );
 
-	sfpSkins.$skinApplyConfirmDialog.find( '.button-primary' ).click( function () {
-		$.each( sfpSkins.$skinApplyConfirmDialog.data( 'settings' ), function ( setID, value ) {
-			var settingId;
-			settingId = 'string' === typeof sfpSkins.settingsMaps[setID] ? sfpSkins.settingsMaps[setID] : sfpSkins.settingsMaps[setID + ']'];
-			if ( settingId ) {
-				sfpSkins.set( settingId, value );
-			} else {
-				console.log( 'Couldn\'t find setting for ' + setID );
-			}
-			return void 0;
-		} );
-		sfpSkins.$skinApplyConfirmDialog.hide();
-		return sfpSkins.notice( 'Skin applied.' );
-	} );
-
 	sfpSkins.$orle.click( sfpSkins.closeSaveDlg );
 
 	sfpSkins.$wrap.click( function ( e ) {
@@ -214,7 +203,17 @@ jQuery( function ( $ ) {
 			applySkin: function ( skn ) {
 				$appWrap.fadeOut();
 				if ( skn ) {
-					sfpSkins.$skinApplyConfirmDialog.data( 'skin', skn.name ).data( 'settings', skn.data ).show().find( '.skin-name' ).html( skn.name );
+					$.each( skn.data, function ( setID, value ) {
+						var settingId;
+						settingId = 'string' === typeof sfpSkins.settingsMaps[setID] ? sfpSkins.settingsMaps[setID] : sfpSkins.settingsMaps[setID + ']'];
+						if ( settingId ) {
+							sfpSkins.set( settingId, value );
+						} else {
+							console.log( 'Couldn\'t find setting for ' + setID );
+						}
+						return void 0;
+					} );
+					return sfpSkins.notice( 'Loading skin preview...' );
 				}
 			}
 		},

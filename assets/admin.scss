@@ -10,7 +10,7 @@
 	left: 52px;
 }
 
-#sfp-skins-apply-confirm,#sfp-skins-overlay, #sfp-skins-notice, #sfp-skins-dialog {
+#sfp-skins-overlay, #sfp-skins-notice, #sfp-skins-dialog {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -19,17 +19,6 @@
 	margin: auto;
 	background: rgba(0,0,0,0.5);
 	z-index: 97;
-}
-#sfp-skins-apply-confirm {
-	height: 70px;
-	width: 520px;
-	padding: 1em;
-	background: #fff;
-	border: 1px outset #aaa;
-	button, p {
-		margin: 1em;
-		float:right;
-	}
 }
 
 #sfp-skins-notice {
