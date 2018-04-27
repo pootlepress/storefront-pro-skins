@@ -8,8 +8,8 @@ Author URI: http://www.pootlepress.com
 Author: PootlePress
 Donate link:
 Requires at least: 4.1.0
-Tested up to: 4.7.3-alpha
-Stable tag: 0.5.0
+Tested up to: 4.9.5
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -57,6 +57,11 @@ We encourage everyone to contribute their ideas, thoughts and code snippets. Thi
 Initial release
 
 == Changelog ==
+= 1.0.0 =
+* 2018-04-27
+* New - Save skins to Pootle cloud
+* New - Refreshed User Interface
+
 = 0.5.0 =
 * 2017-02-10
 * Initial release. It's alive!
